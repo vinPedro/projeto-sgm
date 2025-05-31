@@ -2,8 +2,9 @@ package br.edu.ifpb.sgm.projeto_sgm.repository;
 
 import br.edu.ifpb.sgm.projeto_sgm.model.Pessoa;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.List;
+
 public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
+    List<Pessoa> findByNomeContainingIgnoreCase(String nome);
 }
