@@ -1,10 +1,7 @@
 package br.edu.ifpb.sgm.projeto_sgm.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +17,17 @@ public class Curso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
-    private String nivel;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private NivelCurso nivel;
+
+    @Column(nullable = false)
     private int duracao; // em semestres, por exemplo
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Instituicao instituicao;
 
     @OneToOne(mappedBy = "curso")

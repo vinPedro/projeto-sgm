@@ -1,10 +1,7 @@
 package br.edu.ifpb.sgm.projeto_sgm.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
@@ -17,12 +14,15 @@ public class Disciplina {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false)
     private int cargaHoraria;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Curso curso;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Professor professor;
 }

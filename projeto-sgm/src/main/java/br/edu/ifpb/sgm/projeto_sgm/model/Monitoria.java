@@ -1,10 +1,7 @@
 package br.edu.ifpb.sgm.projeto_sgm.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +17,19 @@ public class Monitoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Considere tornar esse campo uma entidade Disciplina se quiser ligação forte
-    private String disciplina;
+    @ManyToOne(optional = false)
+    private Disciplina disciplina; // Considere transformar em entidade se quiser relação forte
 
+    @Column(nullable = false)
     private int numeroVaga;
+
+    @Column(nullable = false)
     private int numeroVagaBolsa;
+
+    @Column(nullable = false)
     private int cargaHoraria;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Professor professor;
 
     @ManyToMany
@@ -46,7 +48,7 @@ public class Monitoria {
     )
     private List<Aluno> inscritos = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private ProcessoSeletivo processoSeletivo;
 
     @OneToMany(mappedBy = "monitoria")
