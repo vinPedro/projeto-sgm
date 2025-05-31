@@ -1,6 +1,8 @@
 package br.edu.ifpb.sgm.projeto_sgm.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import lombok.*;
 
