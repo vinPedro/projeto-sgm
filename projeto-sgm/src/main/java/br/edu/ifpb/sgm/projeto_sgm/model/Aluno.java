@@ -1,17 +1,24 @@
 package br.edu.ifpb.sgm.projeto_sgm.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Aluno extends Pessoa{
+@AllArgsConstructor
+@Table(name = "aluno")
+public class Aluno extends Pessoa {
 
     @ManyToMany
-    private List<Disciplina> disciplinasPagas;
+    @JoinTable(
+        name = "aluno_disciplinas_pagas",
+        joinColumns = @JoinColumn(name = "aluno_id"),
+        inverseJoinColumns = @JoinColumn(name = "disciplina_id")
+    )
+    private Set<Disciplina> disciplinasPagas = new HashSet<>();
 }

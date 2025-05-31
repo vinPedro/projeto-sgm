@@ -3,12 +3,14 @@ package br.edu.ifpb.sgm.projeto_sgm.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Curso {
 
     @Id
@@ -26,5 +28,5 @@ public class Curso {
     private Coordenador coordenador;
 
     @OneToMany(mappedBy = "curso")
-    private List<Disciplina> disciplinas;
+    private List<Disciplina> disciplinas = new ArrayList<>();
 }

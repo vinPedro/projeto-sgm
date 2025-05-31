@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProcessoSeletivo {
 
     @Id
@@ -24,5 +26,5 @@ public class ProcessoSeletivo {
     private Instituicao instituicao;
 
     @OneToMany(mappedBy = "processoSeletivo")
-    private List<Monitoria> monitorias;
+    private List<Monitoria> monitorias = new ArrayList<>();
 }

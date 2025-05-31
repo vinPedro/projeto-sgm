@@ -9,20 +9,22 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "atividade")
 public class Atividade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime inicio;
-    private LocalDateTime fim;
+    @Column(nullable = false)
+    private LocalDateTime dataHora;
+
+    @Lob
+    @Column(nullable = false)
     private String descricao;
-    private String nome;
 
-    @ManyToOne
-    private Monitor monitor;
-
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "monitoria_id", nullable = false)
     private Monitoria monitoria;
 }

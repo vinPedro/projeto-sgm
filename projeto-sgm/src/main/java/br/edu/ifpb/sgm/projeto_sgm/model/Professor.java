@@ -4,14 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Professor extends Pessoa{
+@AllArgsConstructor
+public class Professor extends Pessoa {
 
     @OneToMany(mappedBy = "professor")
-    private List<Disciplina> disciplinas;
+    private List<Disciplina> disciplinas = new ArrayList<>();
 }
