@@ -1,9 +1,6 @@
 package br.edu.ifpb.sgm.projeto_sgm.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +15,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Monitor extends Aluno {
+
+    @OneToOne
+    @JoinColumn(name = "aluno_id")
+    private Aluno aluno;
 
     @ManyToMany
     @JoinTable(

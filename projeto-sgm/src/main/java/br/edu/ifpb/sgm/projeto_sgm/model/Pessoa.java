@@ -22,9 +22,6 @@ public abstract class Pessoa {
     @Column(length = 14, nullable = false, unique = true)
     protected String cpf;
 
-    @Column(length = 12, nullable = false, unique = true)
-    protected String matricula;
-
     @Column(nullable = false)
     protected String nome;
 

@@ -17,6 +17,9 @@ import java.util.Set;
 @Table(name = "aluno")
 public class Aluno extends Pessoa {
 
+    @Column(length = 12, nullable = false, unique = true)
+    protected String matricula;
+
     @ManyToMany
     @JoinTable(
         name = "aluno_disciplinas_pagas",
