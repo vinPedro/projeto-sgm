@@ -1,26 +1,28 @@
 package br.edu.ifpb.sgm.projeto_sgm.model;
 
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pessoa {
+public abstract class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column(nullable = false, unique = true, length = 14)
+    @Column(length = 14, nullable = false, unique = true)
     protected String cpf;
 
-    @Column(nullable = false, unique = true)
+    @Column(length = 12, nullable = false, unique = true)
     protected String matricula;
 
     @Column(nullable = false)
