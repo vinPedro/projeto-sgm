@@ -4,7 +4,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class MonitoriaResquestDTO {
+public class MonitoriaRequestDTO {
 
     private Long disciplinaId;
     private int numeroVaga;
