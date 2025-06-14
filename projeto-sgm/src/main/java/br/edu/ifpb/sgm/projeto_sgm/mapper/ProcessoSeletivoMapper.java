@@ -4,19 +4,28 @@ import br.edu.ifpb.sgm.projeto_sgm.dto.ProcessoSeletivoRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.ProcessoSeletivoResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.model.ProcessoSeletivo;
 import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
-        uses = {InstituicaoMapper.class, MonitoriaMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public interface ProcessoSeletivoMapper {
+public abstract class ProcessoSeletivoMapper {
 
-    ProcessoSeletivo toEntity(ProcessoSeletivoRequestDTO processoSeletivoRequestDTO);
+    @Autowired
+    @Lazy
+    protected InstituicaoMapper instituicaoMapper;
+
+    @Autowired
+    @Lazy
+    protected MonitoriaMapper monitoriaMapper;
+
+    public abstract ProcessoSeletivo toEntity(ProcessoSeletivoRequestDTO processoSeletivoRequestDTO);
 
     @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
     @Mapping(source = "monitorias", target = "monitoriasResponseDTO")
-    ProcessoSeletivoResponseDTO toResponseDTO(ProcessoSeletivo processoSeletivo);
+    public abstract ProcessoSeletivoResponseDTO toResponseDTO(ProcessoSeletivo processoSeletivo);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateProcessoSeletivoFromDto(ProcessoSeletivoRequestDTO dto, @MappingTarget ProcessoSeletivo entity);
+    public abstract void updateProcessoSeletivoFromDto(ProcessoSeletivoRequestDTO dto, @MappingTarget ProcessoSeletivo entity);
 }

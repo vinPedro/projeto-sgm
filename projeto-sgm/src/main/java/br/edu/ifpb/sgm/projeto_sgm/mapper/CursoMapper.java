@@ -4,20 +4,33 @@ import br.edu.ifpb.sgm.projeto_sgm.dto.CursoRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.CursoResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.model.Curso;
 import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
-        uses = {InstituicaoMapper.class, CoordenadorMapper.class, DisciplinaMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public interface CursoMapper {
+public abstract class CursoMapper {
 
-    Curso toEntity(CursoRequestDTO CursoRequestDTO);
+    @Autowired
+    @Lazy
+    protected InstituicaoMapper instituicaoMapper;
+
+    @Autowired
+    @Lazy
+    protected CoordenadorMapper coordenadorMapper;
+
+    @Autowired
+    @Lazy
+    protected DisciplinaMapper disciplinaMapper;
+
+    public abstract Curso toEntity(CursoRequestDTO CursoRequestDTO);
 
     @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
     @Mapping(source = "coordenador", target = "coordenadorResponseDTO")
     @Mapping(source = "disciplinas", target = "disciplinasResponseDTO")
-    CursoResponseDTO toResponseDTO(Curso curso);
+    public abstract CursoResponseDTO toResponseDTO(Curso curso);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateCursoFromDto(CursoRequestDTO dto, @MappingTarget Curso entity);
+    public abstract void updateCursoFromDto(CursoRequestDTO dto, @MappingTarget Curso entity);
 }
