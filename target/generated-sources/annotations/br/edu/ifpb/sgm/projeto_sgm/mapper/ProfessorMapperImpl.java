@@ -8,15 +8,19 @@ import br.edu.ifpb.sgm.projeto_sgm.model.Professor;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-06-14T12:54:29-0300",
+    date = "2025-07-11T15:25:39-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 24.0.1 (Oracle Corporation)"
 )
 @Component
 public class ProfessorMapperImpl extends ProfessorMapper {
+
+    @Autowired
+    private InstituicaoMapper instituicaoMapper;
 
     @Override
     public Professor toEntity(ProfessorRequestDTO professorRequestDTO) {
@@ -43,6 +47,7 @@ public class ProfessorMapperImpl extends ProfessorMapper {
         ProfessorResponseDTO professorResponseDTO = new ProfessorResponseDTO();
 
         professorResponseDTO.setDisciplinasResponseDTO( disciplinaListToDisciplinaResponseDTOList( professor.getDisciplinas() ) );
+        professorResponseDTO.setInstituicaoResponseDTO( instituicaoMapper.toResponseDTO( professor.getInstituicao() ) );
         professorResponseDTO.setId( professor.getId() );
         professorResponseDTO.setCpf( professor.getCpf() );
         professorResponseDTO.setNome( professor.getNome() );

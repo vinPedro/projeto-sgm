@@ -2,13 +2,17 @@ package br.edu.ifpb.sgm.projeto_sgm.service;
 
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.exception.CursoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.AlunoNotFoundException;
+import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.AlunoMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.Aluno;
 import br.edu.ifpb.sgm.projeto_sgm.model.Disciplina;
+import br.edu.ifpb.sgm.projeto_sgm.model.Instituicao;
 import br.edu.ifpb.sgm.projeto_sgm.repository.AlunoRepository;
 import br.edu.ifpb.sgm.projeto_sgm.repository.DisciplinaRepository;
+import br.edu.ifpb.sgm.projeto_sgm.repository.InstituicaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +35,15 @@ public class AlunoServiceImp {
     private DisciplinaRepository disciplinaRepository;
 
     @Autowired
+    private InstituicaoRepository instituicaoRepository;
+
+    @Autowired
     private AlunoMapper alunoMapper;
 
 
     public ResponseEntity<AlunoResponseDTO> salvar(AlunoRequestDTO alunoRequestDTO){
         Aluno aluno = alunoMapper.toEntity(alunoRequestDTO);
+        aluno.setInstituicao(buscarInstituicao(alunoRequestDTO.getInstituicaoId()));
         aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
         Aluno salvo = alunoRepository.save(aluno);
         return ResponseEntity.status(HttpStatus.CREATED).body(alunoMapper.toResponseDTO(salvo));
@@ -92,5 +100,10 @@ public class AlunoServiceImp {
                 .map(id -> disciplinaRepository.findById(id).get())
                 .collect(Collectors.toSet());
 
+    }
+
+    private Instituicao buscarInstituicao(Long id) {
+        return instituicaoRepository.findById(id)
+                .orElseThrow(() -> new InstituicaoNotFoundException("Instituição com ID " + id + " não encontrada."));
     }
 }

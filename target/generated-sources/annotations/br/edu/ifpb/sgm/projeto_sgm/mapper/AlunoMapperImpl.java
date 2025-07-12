@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-06-14T12:54:29-0300",
+    date = "2025-07-11T15:25:39-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 24.0.1 (Oracle Corporation)"
 )
 @Component
@@ -21,6 +21,8 @@ public class AlunoMapperImpl implements AlunoMapper {
 
     @Autowired
     private DisciplinaMapper disciplinaMapper;
+    @Autowired
+    private InstituicaoMapper instituicaoMapper;
 
     @Override
     public Aluno toEntity(AlunoRequestDTO alunoRequestDTO) {
@@ -48,6 +50,7 @@ public class AlunoMapperImpl implements AlunoMapper {
         AlunoResponseDTO alunoResponseDTO = new AlunoResponseDTO();
 
         alunoResponseDTO.setDisciplinasPagasResponseDTO( disciplinaSetToDisciplinaResponseDTOSet( aluno.getDisciplinasPagas() ) );
+        alunoResponseDTO.setInstituicaoResponseDTO( instituicaoMapper.toResponseDTO( aluno.getInstituicao() ) );
         alunoResponseDTO.setId( aluno.getId() );
         alunoResponseDTO.setCpf( aluno.getCpf() );
         alunoResponseDTO.setNome( aluno.getNome() );

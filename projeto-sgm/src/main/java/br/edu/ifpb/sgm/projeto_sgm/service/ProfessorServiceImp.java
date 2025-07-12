@@ -3,11 +3,14 @@ package br.edu.ifpb.sgm.projeto_sgm.service;
 import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
+import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.ProfessorNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.ProfessorMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.Disciplina;
+import br.edu.ifpb.sgm.projeto_sgm.model.Instituicao;
 import br.edu.ifpb.sgm.projeto_sgm.model.Professor;
 import br.edu.ifpb.sgm.projeto_sgm.repository.DisciplinaRepository;
+import br.edu.ifpb.sgm.projeto_sgm.repository.InstituicaoRepository;
 import br.edu.ifpb.sgm.projeto_sgm.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,12 +33,17 @@ public class ProfessorServiceImp {
     private DisciplinaRepository disciplinaRepository;
 
     @Autowired
+    private InstituicaoRepository instituicaoRepository;
+
+    @Autowired
     private ProfessorMapper professorMapper;
 
     public ResponseEntity<ProfessorResponseDTO> salvar(ProfessorRequestDTO dto) {
         Professor professor = professorMapper.toEntity(dto);
         professor.setDisciplinas(buscarDisciplinas(dto.getDisciplinasId()));
+        professor.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
         Professor salvo = professorRepository.save(professor);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(professorMapper.toResponseDTO(salvo));
     }
 
@@ -89,5 +97,10 @@ public class ProfessorServiceImp {
         return ids.stream()
                 .map(id -> disciplinaRepository.findById(id).get())
                 .collect(Collectors.toList());
+    }
+
+    private Instituicao buscarInstituicao(Long id) {
+        return instituicaoRepository.findById(id)
+                .orElseThrow(() -> new InstituicaoNotFoundException("Instituição com ID " + id + " não encontrada."));
     }
 }

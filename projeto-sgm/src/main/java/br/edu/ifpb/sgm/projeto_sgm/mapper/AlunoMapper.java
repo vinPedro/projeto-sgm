@@ -7,7 +7,7 @@ import org.mapstruct.*;
 
 @Mapper(
         componentModel = "spring",
-        uses = {DisciplinaMapper.class},
+        uses = {DisciplinaMapper.class, InstituicaoMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface AlunoMapper {
@@ -15,6 +15,7 @@ public interface AlunoMapper {
     Aluno toEntity(AlunoRequestDTO alunoRequestDTO);
 
     @Mapping(source = "disciplinasPagas", target = "disciplinasPagasResponseDTO")
+    @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
     AlunoResponseDTO toResponseDTO(Aluno aluno);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
