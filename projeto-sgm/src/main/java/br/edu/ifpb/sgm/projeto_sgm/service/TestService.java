@@ -5,7 +5,6 @@ import br.edu.ifpb.sgm.projeto_sgm.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

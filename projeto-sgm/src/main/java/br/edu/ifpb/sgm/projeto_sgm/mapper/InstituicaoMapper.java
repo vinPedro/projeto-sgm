@@ -2,9 +2,7 @@ package br.edu.ifpb.sgm.projeto_sgm.mapper;
 
 import br.edu.ifpb.sgm.projeto_sgm.dto.InstituicaoRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.InstituicaoResponseDTO;
-import br.edu.ifpb.sgm.projeto_sgm.model.Curso;
 import br.edu.ifpb.sgm.projeto_sgm.model.Instituicao;
-import br.edu.ifpb.sgm.projeto_sgm.model.Professor;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

@@ -3,7 +3,6 @@ package br.edu.ifpb.sgm.projeto_sgm.service;
 import br.edu.ifpb.sgm.projeto_sgm.dto.InstituicaoRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.InstituicaoResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.exception.CursoNotFoundException;
-import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.ProcessoSeletivoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.InstituicaoMapper;

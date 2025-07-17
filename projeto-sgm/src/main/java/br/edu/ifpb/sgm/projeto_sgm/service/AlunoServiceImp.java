@@ -2,7 +2,6 @@ package br.edu.ifpb.sgm.projeto_sgm.service;
 
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
-import br.edu.ifpb.sgm.projeto_sgm.exception.CursoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.AlunoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
