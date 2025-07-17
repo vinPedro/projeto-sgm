@@ -10,7 +10,6 @@ import org.mapstruct.*;
 )
 public abstract class CoordenadorMapper {
 
-    // Este método não precisa de alteração
     public abstract Coordenador toEntity(CoordenadorRequestDTO coordenadorRequestDTO);
 
     /**
@@ -23,7 +22,6 @@ public abstract class CoordenadorMapper {
     public abstract CoordenadorResponseDTO toResponseDTO(Coordenador coordenador);
 
 
-    // Este método não precisa de alteração
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateCoordenadorFromDto(CoordenadorRequestDTO dto, @MappingTarget Coordenador entity);
 }
