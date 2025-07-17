@@ -1,0 +1,101 @@
+Instituição
+INSERT INTO instituicao (id, nome, cnpj, email)
+VALUES (1, 'Instituto Federal de Testes', '12345678000199', 'teste@ifpb.edu.br');
+
+
+CURSO
+INSERT INTO curso (id, nome, nivel, duracao, instituicao_id)
+VALUES (1, 'Curso de Sistemas de Teste', 'GRADUACAO', 6, 1);
+
+
+Processo Seletivo
+INSERT INTO processo_seletivo (id, inicio, fim, numero, instituicao_id)
+VALUES (
+  1,
+  DATE '2025-08-01',
+  DATE '2025-08-30',
+  '2025.2-IFPB-TESTE',
+  1
+);
+
+
+
+
+COORDENADOR COMPLETO
+SELECT 
+    c.id AS coordenador_id,
+    p.nome AS nome,
+    p.cpf AS cpf,
+    p.email AS email,
+    p.email_academico AS email_academico,
+    i.nome AS instituicao,
+    i.cnpj AS cnpj_instituicao,
+    cr.nome AS curso,
+    cr.nivel AS nivel_curso,
+    cr.duracao AS duracao_curso
+FROM coordenador c
+JOIN professor pr ON c.id = pr.id
+JOIN pessoa p ON pr.id = p.id
+JOIN instituicao i ON p.instituicao_id = i.id
+JOIN curso cr ON c.curso_id = cr.id;
+
+
+
+2025-07-16T19:01:40.073-03:00 ERROR 10132 --- [projetoSgm] [nio-8080-exec-1] 
+o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dis
+patcherServlet] in context with path [] threw exception [Request processing f
+ailed: java.lang.NullPointerException: Cannot invoke "br.edu.ifpb.sgm.projeto
+_sgm.model.Curso.getId()" because the return value of "br.edu.ifpb.sgm.projeto_sgm.model.Coordenador.getCurso()" is null] with root cause
+
+java.lang.NullPointerException: Cannot invoke "br.edu.ifpb.sgm.projeto_sgm.mo
+del.Curso.getId()" because the return value of "br.edu.ifpb.sgm.projeto_sgm.model.Coordenador.getCurso()" is null
+        at br.edu.ifpb.sgm.projeto_sgm.service.CoordenadorService.salvar(CoordenadorService.java:26) ~[classes/:na]
+        at br.edu.ifpb.sgm.projeto_sgm.controller.CoordenadorController.salvar(CoordenadorController.java:25) ~[classes/:na]
+        at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+        at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+        at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258) ~[spring-web-6.2.7.jar:6.2.7]
+        at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191) ~[spring-web-6.2.7.jar:6.2.7]  
+        at org.springframework.web.servlet.mvc.method.annotation.ServletInvoc
+ableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.2.7.jar:6.2.7]
+        at org.springframework.web.servlet.mvc.method.annotation.RequestMappi
+ngHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986) ~[spring-webmvc-6.2.7.jar:6.2.7]
+        at org.springframework.web.servlet.mvc.method.annotation.RequestMappi
+ngHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891) ~[spring-webmvc-6.2.7.jar:6.2.7]
+        at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAd
+apter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.2.7.jar:6.2.7]
+        at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.2.7.jar:6.2.7]
+        at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.2.7.jar:6.2.7]
+        at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.2.7.jar:6.2.7]
+        at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914) ~[spring-webmvc-6.2.7.jar:6.2.7]
+        at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590) ~[tomcat-embed-core-10.1.41.jar:6.0]
+        at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.2.7.jar:6.2.7]
+        at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.41.jar:6.0]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.41.jar:10.1.41]     
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.41.jar:10.1.41]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.41.jar:10.1.41]     
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.2.7.jar:6.2.7]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.7.jar:6.2.7]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.41.jar:10.1.41]     
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.2.7.jar:6.2.7]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.7.jar:6.2.7]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.41.jar:10.1.41]     
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.2.7.jar:6.2.7]        
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.7.jar:6.2.7]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.41.jar:10.1.41]     
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+actProtocol.java:903) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.41.jar:10.1.41]
+        at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
