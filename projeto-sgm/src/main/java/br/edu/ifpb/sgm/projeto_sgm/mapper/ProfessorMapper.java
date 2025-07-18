@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
-        uses = {InstituicaoMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public abstract class ProfessorMapper {
@@ -16,6 +15,10 @@ public abstract class ProfessorMapper {
     @Autowired
     @Lazy
     protected DisciplinaMapper disciplinaMapper;
+
+    @Autowired
+    @Lazy
+    protected InstituicaoMapper instituicaoMapper;
 
     public abstract Professor toEntity(ProfessorRequestDTO professorRequestDTO);
 

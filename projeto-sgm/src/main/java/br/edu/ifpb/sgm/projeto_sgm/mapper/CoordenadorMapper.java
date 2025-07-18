@@ -4,21 +4,32 @@ import br.edu.ifpb.sgm.projeto_sgm.dto.CoordenadorRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.CoordenadorResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.model.Coordenador;
 import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public abstract class CoordenadorMapper {
 
+    @Autowired
+    @Lazy
+    protected DisciplinaMapper disciplinaMapper;
+
+    @Autowired
+    @Lazy
+    protected InstituicaoMapper instituicaoMapper;
+
+    @Autowired
+    @Lazy
+    protected CursoMapper cursoMapper;
+
     public abstract Coordenador toEntity(CoordenadorRequestDTO coordenadorRequestDTO);
 
-    /**
-     * Mapeia a entidade Coordenador para o DTO de resposta.
-     * As anotações @Mapping definem as regras de "tradução".
-     */
-    @Mapping(source = "nome", target = "nomeProfessor") // Pega o campo "nome" da entidade e coloca em "nomeProfessor" no DTO
-    @Mapping(source = "email", target = "emailProfessor") // Pega "email" e coloca em "emailProfessor"
-    @Mapping(source = "curso.nome", target = "nomeCurso") // Pega o nome de dentro do objeto curso
+     // Pega "email" e coloca em "emailProfessor"
+     @Mapping(source = "disciplinas", target = "disciplinasResponseDTO")
+     @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
+    @Mapping(source = "curso", target = "cursoResponseDTO") // Pega o nome de dentro do objeto curso
     public abstract CoordenadorResponseDTO toResponseDTO(Coordenador coordenador);
 
 

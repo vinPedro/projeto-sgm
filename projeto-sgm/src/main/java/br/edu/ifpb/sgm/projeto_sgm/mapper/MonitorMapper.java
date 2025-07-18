@@ -20,10 +20,15 @@ public abstract class MonitorMapper {
     @Lazy
     protected DisciplinaMapper disciplinaMapper;
 
+    @Autowired
+    @Lazy
+    protected InstituicaoMapper instituicaoMapper;
+
     public abstract Monitor toEntity(MonitorRequestDTO monitorRequestDTO);
 
     @Mapping(source = "aluno", target = "alunoResponseDTO")
     @Mapping(source = "disciplinaMonitoria", target = "disciplinaMonitoriaResponseDTO")
+    @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
     public abstract MonitorResponseDTO toResponseDTO(Monitor monitor);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

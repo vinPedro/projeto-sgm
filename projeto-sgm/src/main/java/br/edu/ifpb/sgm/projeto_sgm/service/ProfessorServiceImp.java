@@ -71,6 +71,10 @@ public class ProfessorServiceImp {
             professor.setDisciplinas(buscarDisciplinas(dto.getDisciplinasId()));
         }
 
+        if (dto.getInstituicaoId() != null) {
+            professor.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
+        }
+
         Professor atualizado = professorRepository.save(professor);
         return ResponseEntity.ok(professorMapper.toResponseDTO(atualizado));
     }
