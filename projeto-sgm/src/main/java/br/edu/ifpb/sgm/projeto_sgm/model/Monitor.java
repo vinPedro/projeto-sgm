@@ -14,9 +14,13 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Monitor extends Aluno {
+public class Monitor {
+
+    @Id
+    protected Long id;
 
     @OneToOne
+    @MapsId
     @JoinColumn(name = "aluno_id")
     private Aluno aluno;
 

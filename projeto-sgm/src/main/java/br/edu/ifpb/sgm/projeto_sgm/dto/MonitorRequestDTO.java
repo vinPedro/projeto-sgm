@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class MonitorRequestDTO extends AlunoRequestDTO{
+public class MonitorRequestDTO{
 
     private Long alunoId;
     private Set<Long> disciplinaMonitoriaId;

@@ -11,6 +11,6 @@ public class ProcessoSeletivoRequestDTO {
     private LocalDate inicio;
     private LocalDate fim;
     private String numero;
-    private Long instituicaoID;
-    private List<Long> monitoriasId;
+    private Long instituicaoId;
+
 }

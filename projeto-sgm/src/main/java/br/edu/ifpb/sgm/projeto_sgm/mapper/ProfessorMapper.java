@@ -8,24 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
+        uses = {DisciplinaMapper.class, InstituicaoMapper.class, PessoaMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public abstract class ProfessorMapper {
+public interface ProfessorMapper {
 
-    @Autowired
-    @Lazy
-    protected DisciplinaMapper disciplinaMapper;
-
-    @Autowired
-    @Lazy
-    protected InstituicaoMapper instituicaoMapper;
-
-    public abstract Professor toEntity(ProfessorRequestDTO professorRequestDTO);
+    @Mapping(target = "pessoa", ignore = true)
+    @Mapping(target = "coordenador", ignore = true)
+    Professor toEntity(ProfessorRequestDTO professorRequestDTO);
 
     @Mapping(source = "disciplinas", target = "disciplinasResponseDTO")
+    @Mapping(source = "pessoa.id", target = "id")
+    @Mapping(source = "pessoa.cpf", target = "cpf")
+    @Mapping(source = "pessoa.nome", target = "nome")
+    @Mapping(source = "pessoa.email", target = "email")
+    @Mapping(source = "pessoa.emailAcademico", target = "emailAcademico")
     @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
-    public abstract ProfessorResponseDTO toResponseDTO(Professor professor);
+    ProfessorResponseDTO toResponseDTO(Professor professor);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateProfessorFromDto(ProfessorRequestDTO dto, @MappingTarget Professor entity);
+    void updateProfessorFromDto(ProfessorRequestDTO dto, @MappingTarget Professor entity);
 }

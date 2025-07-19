@@ -8,12 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Pessoa {
+public class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +26,21 @@ public abstract class Pessoa {
 
     @Column(nullable = false, unique = true)
     protected String email;
-
     @Column(unique = true)
     protected String emailAcademico;
 
     @ManyToOne(optional = false)
     protected Instituicao instituicao;
+
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    private Aluno aluno;
+
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    private Professor professor;
+
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    private Monitor monitor;
+
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    private Coordenador coordenador;
 }

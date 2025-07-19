@@ -8,10 +8,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MonitorRepository extends JpaRepository<Monitor, Long> {
-    List<Monitor> findByDisciplinaMonitoria_Id(Long disciplinaId);
-    List<Monitor> findByNomeContainingIgnoreCase(String nome);
-
-    //Buscar monitores por disciplina e instituição
-    @Query("SELECT mo FROM Monitor mo JOIN mo.disciplinaMonitoria d WHERE d.id = :disciplinaId AND mo.instituicao.id = :instituicaoId")
-    List<Monitor> findMonitoresByDisciplinaAndInstituicao(@Param("disciplinaId") Long disciplinaId, @Param("instituicaoId") Long instituicaoId);
+//    List<Monitor> findByDisciplinaMonitoria_Id(Long disciplinaId);
+//    List<Monitor> findByNomeContainingIgnoreCase(String nome);
+//
+//    //Buscar monitores por disciplina e instituição
+//    @Query("SELECT mo FROM Monitor mo JOIN mo.disciplinaMonitoria d WHERE d.id = :disciplinaId AND mo.instituicao.id = :instituicaoId")
+//    List<Monitor> findMonitoresByDisciplinaAndInstituicao(@Param("disciplinaId") Long disciplinaId, @Param("instituicaoId") Long instituicaoId);
 }

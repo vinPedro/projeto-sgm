@@ -24,8 +24,6 @@ public class Disciplina {
     private int cargaHoraria;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "curso_id")
     private Curso curso;
-
-    @ManyToOne(optional = false)
-    private Professor professor;
 }

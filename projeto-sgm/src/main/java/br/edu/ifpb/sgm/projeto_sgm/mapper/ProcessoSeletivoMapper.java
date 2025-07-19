@@ -8,24 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
+        uses = {InstituicaoMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public abstract class ProcessoSeletivoMapper {
+public interface ProcessoSeletivoMapper {
 
-    @Autowired
-    @Lazy
-    protected InstituicaoMapper instituicaoMapper;
-
-    @Autowired
-    @Lazy
-    protected MonitoriaMapper monitoriaMapper;
-
-    public abstract ProcessoSeletivo toEntity(ProcessoSeletivoRequestDTO processoSeletivoRequestDTO);
+    ProcessoSeletivo toEntity(ProcessoSeletivoRequestDTO processoSeletivoRequestDTO);
 
     @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
-    @Mapping(source = "monitorias", target = "monitoriasResponseDTO")
-    public abstract ProcessoSeletivoResponseDTO toResponseDTO(ProcessoSeletivo processoSeletivo);
+    ProcessoSeletivoResponseDTO toResponseDTO(ProcessoSeletivo processoSeletivo);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateProcessoSeletivoFromDto(ProcessoSeletivoRequestDTO dto, @MappingTarget ProcessoSeletivo entity);
+    void updateProcessoSeletivoFromDto(ProcessoSeletivoRequestDTO dto, @MappingTarget ProcessoSeletivo entity);
 }

@@ -7,15 +7,23 @@ import org.mapstruct.*;
 
 @Mapper(
         componentModel = "spring",
-        uses = {DisciplinaMapper.class, InstituicaoMapper.class},
+        uses = {DisciplinaMapper.class, InstituicaoMapper.class, PessoaMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface AlunoMapper {
 
+    @Mapping(target = "pessoa", ignore = true)
+    @Mapping(target = "monitor", ignore = true)
     Aluno toEntity(AlunoRequestDTO alunoRequestDTO);
 
+
     @Mapping(source = "disciplinasPagas", target = "disciplinasPagasResponseDTO")
-    @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
+    @Mapping(source = "pessoa.id", target = "id")
+    @Mapping(source = "pessoa.cpf", target = "cpf")
+    @Mapping(source = "pessoa.nome", target = "nome")
+    @Mapping(source = "pessoa.email", target = "email")
+    @Mapping(source = "pessoa.emailAcademico", target = "emailAcademico")
+    @Mapping(source = "pessoa.instituicao", target = "instituicaoResponseDTO")
     AlunoResponseDTO toResponseDTO(Aluno aluno);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

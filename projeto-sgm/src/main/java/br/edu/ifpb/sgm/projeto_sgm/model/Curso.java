@@ -31,11 +31,7 @@ public class Curso {
     private int duracao; // em semestres, por exemplo
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "instiuicao_id", nullable = false)
     private Instituicao instituicao;
 
-    @OneToOne(mappedBy = "curso")
-    private Coordenador coordenador;
-
-    @OneToMany(mappedBy = "curso")
-    private List<Disciplina> disciplinas = new ArrayList<>();
 }

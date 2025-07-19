@@ -4,8 +4,14 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class AlunoRequestDTO extends PessoaRequestDTO{
+public class AlunoRequestDTO{
 
+    protected String cpf;
+    protected String nome;
+    protected String email;
+    protected String emailAcademico;
+    protected Long instituicaoId;
     protected String matricula;
     private Set<Long> disciplinasPagasId;
+
 }

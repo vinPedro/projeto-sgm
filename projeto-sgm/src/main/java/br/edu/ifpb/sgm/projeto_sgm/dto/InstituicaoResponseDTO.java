@@ -10,6 +10,5 @@ public class InstituicaoResponseDTO {
     private String nome;
     private String cnpj;
     private String email;
-    private List<CursoResponseDTO> cursosResponseDTO;
-    private List<ProcessoSeletivoResponseDTO> processosSeletivosResponseDTO;
+
 }

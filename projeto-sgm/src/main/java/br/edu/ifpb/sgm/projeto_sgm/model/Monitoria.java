@@ -21,6 +21,7 @@ public class Monitoria {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "disciplina_id")
     private Disciplina disciplina; // Considere transformar em entidade se quiser relação forte
 
     @Column(nullable = false)
@@ -33,27 +34,14 @@ public class Monitoria {
     private int cargaHoraria;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "professor_id")
     private Professor professor;
 
-    @ManyToMany
-    @JoinTable(
-        name = "monitoria_selecionados",
-        joinColumns = @JoinColumn(name = "monitoria_id"),
-        inverseJoinColumns = @JoinColumn(name = "aluno_id")
-    )
-    private List<Aluno> selecionados = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-        name = "monitoria_inscritos",
-        joinColumns = @JoinColumn(name = "monitoria_id"),
-        inverseJoinColumns = @JoinColumn(name = "aluno_id")
-    )
-    private List<Aluno> inscritos = new ArrayList<>();
+    @OneToMany(mappedBy = "monitoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MonitoriaInscritos> inscricoes = new ArrayList<>();
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "processoSeletivo_id")
     private ProcessoSeletivo processoSeletivo;
 
-    @OneToMany(mappedBy = "monitoria")
-    private List<Atividade> atividades = new ArrayList<>();
 }

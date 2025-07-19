@@ -3,7 +3,7 @@ package br.edu.ifpb.sgm.projeto_sgm.dto;
 import lombok.Data;
 
 @Data
-public abstract class PessoaRequestDTO {
+public class PessoaRequestDTO {
 
     protected String cpf;
     protected String nome;

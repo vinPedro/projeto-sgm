@@ -10,6 +10,5 @@ public class CursoRequestDTO {
     private String nivelString;
     private int duracao; // em semestres, por exemplo
     private Long instituicaoId;
-    private Long coordenadorID;
-    private List<Long> disciplinasId;
+
 }

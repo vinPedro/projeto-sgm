@@ -15,7 +15,18 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "aluno")
-public class Aluno extends Pessoa {
+public class Aluno {
+
+    @Id
+    protected Long id;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private Pessoa pessoa;
+
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    private Monitor monitor;
 
     @Column(length = 12, nullable = false, unique = true)
     protected String matricula;

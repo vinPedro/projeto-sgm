@@ -10,22 +10,12 @@ import org.springframework.context.annotation.Lazy;
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public abstract class InstituicaoMapper {
+public interface InstituicaoMapper {
 
-    @Autowired
-    @Lazy
-    protected CursoMapper cursoMapper;
+    Instituicao toEntity(InstituicaoRequestDTO instituicaoRequestDTO);
 
-    @Autowired
-    @Lazy
-    protected ProcessoSeletivoMapper processoSeletivoMapper;
-
-    public abstract Instituicao toEntity(InstituicaoRequestDTO instituicaoRequestDTO);
-
-    @Mapping(source = "cursos", target = "cursosResponseDTO")
-    @Mapping(source = "processos", target = "processosSeletivosResponseDTO")
-    public abstract InstituicaoResponseDTO toResponseDTO(Instituicao instituicao);
+    InstituicaoResponseDTO toResponseDTO(Instituicao instituicao);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateInstituicaoFromDto(InstituicaoRequestDTO dto, @MappingTarget Instituicao entity);
+    void updateInstituicaoFromDto(InstituicaoRequestDTO dto, @MappingTarget Instituicao entity);
 }

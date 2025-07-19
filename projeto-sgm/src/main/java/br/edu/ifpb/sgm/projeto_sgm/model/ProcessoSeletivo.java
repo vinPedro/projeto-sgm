@@ -31,8 +31,7 @@ public class ProcessoSeletivo {
     private String numero;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "instiuicao_id", nullable = false)
     private Instituicao instituicao;
 
-    @OneToMany(mappedBy = "processoSeletivo")
-    private List<Monitoria> monitorias = new ArrayList<>();
 }

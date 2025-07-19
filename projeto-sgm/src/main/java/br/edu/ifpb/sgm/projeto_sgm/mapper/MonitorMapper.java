@@ -8,29 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
+        uses = {AlunoMapper.class, DisciplinaMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public abstract class MonitorMapper {
+public interface MonitorMapper {
 
-    @Autowired
-    @Lazy
-    protected AlunoMapper alunoMapper;
-
-    @Autowired
-    @Lazy
-    protected DisciplinaMapper disciplinaMapper;
-
-    @Autowired
-    @Lazy
-    protected InstituicaoMapper instituicaoMapper;
-
-    public abstract Monitor toEntity(MonitorRequestDTO monitorRequestDTO);
+    @Mapping(target = "aluno", ignore = true)
+    Monitor toEntity(MonitorRequestDTO monitorRequestDTO);
 
     @Mapping(source = "aluno", target = "alunoResponseDTO")
     @Mapping(source = "disciplinaMonitoria", target = "disciplinaMonitoriaResponseDTO")
-    @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
-    public abstract MonitorResponseDTO toResponseDTO(Monitor monitor);
+    @Mapping(source = "aluno.id", target = "id")
+    MonitorResponseDTO toResponseDTO(Monitor monitor);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateMonitorFromDto(MonitorRequestDTO dto, @MappingTarget Monitor entity);
+    void updateMonitorFromDto(MonitorRequestDTO dto, @MappingTarget Monitor entity);
 }

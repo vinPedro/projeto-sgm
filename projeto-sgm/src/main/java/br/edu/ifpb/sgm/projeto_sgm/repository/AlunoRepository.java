@@ -11,10 +11,10 @@ import java.util.Optional;
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
     Optional<Aluno> findByMatricula(String matricula);
     List<Aluno> findByNomeContainingIgnoreCase(String nome);
-    List<Aluno> findByDisciplinasPagas_Id(Long disciplinaId);
+//    List<Aluno> findByDisciplinasPagas_Id(Long disciplinaId);
 
-    //Buscar todos alunos inscritos em uma monitoria específica
-    @Query("SELECT a FROM Monitoria m JOIN m.inscritos a WHERE m.id = :monitoriaId")
-    List<Aluno> findAlunosInscritosNaMonitoria(@Param("monitoriaId") Long monitoriaId);
+//    //Buscar todos alunos inscritos em uma monitoria específica
+//    @Query("SELECT a FROM Monitoria m JOIN m.inscritos a WHERE m.id = :monitoriaId")
+//    List<Aluno> findAlunosInscritosNaMonitoria(@Param("monitoriaId") Long monitoriaId);
 
 }

@@ -8,19 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
+        uses = {MonitoriaMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public abstract class AtividadeMapper {
+public interface AtividadeMapper {
 
-    @Autowired
-    @Lazy
-    protected MonitoriaMapper monitoriaMapper;
-
-    public abstract Atividade toEntity(AtividadeRequestDTO atividadeRequestDTO);
+    Atividade toEntity(AtividadeRequestDTO atividadeRequestDTO);
 
     @Mapping(source = "monitoria", target = "monitoriaResponseDTO")
-    public abstract AtividadeResponseDTO toResponseDTO(Atividade atividade);
+    AtividadeResponseDTO toResponseDTO(Atividade atividade);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateAtividadeFromDto(AtividadeRequestDTO dto, @MappingTarget Atividade entity);
+    void updateAtividadeFromDto(AtividadeRequestDTO dto, @MappingTarget Atividade entity);
 }

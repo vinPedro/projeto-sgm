@@ -8,29 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
+        uses = {InstituicaoMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public abstract class CursoMapper {
+public interface CursoMapper {
 
-    @Autowired
-    @Lazy
-    protected InstituicaoMapper instituicaoMapper;
-
-    @Autowired
-    @Lazy
-    protected CoordenadorMapper coordenadorMapper;
-
-    @Autowired
-    @Lazy
-    protected DisciplinaMapper disciplinaMapper;
-
-    public abstract Curso toEntity(CursoRequestDTO CursoRequestDTO);
+    Curso toEntity(CursoRequestDTO CursoRequestDTO);
 
     @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
-    @Mapping(source = "coordenador", target = "coordenadorResponseDTO")
-    @Mapping(source = "disciplinas", target = "disciplinasResponseDTO")
-    public abstract CursoResponseDTO toResponseDTO(Curso curso);
+    CursoResponseDTO toResponseDTO(Curso curso);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateCursoFromDto(CursoRequestDTO dto, @MappingTarget Curso entity);
+    void updateCursoFromDto(CursoRequestDTO dto, @MappingTarget Curso entity);
 }

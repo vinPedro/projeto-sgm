@@ -9,33 +9,21 @@ import org.springframework.context.annotation.Lazy;
 
 @Mapper(
         componentModel = "spring",
+        uses = {DisciplinaMapper.class, ProfessorMapper.class, ProcessoSeletivoMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public abstract class MonitoriaMapper {
 
     @Autowired
     @Lazy
-    protected AtividadeMapper atividadeMapper;
-
-    @Autowired
-    @Lazy
-    protected ProfessorMapper professorMapper;
-
-    @Autowired
-    @Lazy
-    protected ProcessoSeletivoMapper processoSeletivoMapper;
-
-    @Autowired
-    @Lazy
-    protected AlunoMapper alunoMapper;
+    protected MonitoriaInscritosMapper monitoriaInscritosMapper;
 
     public abstract Monitoria toEntity(MonitoriaRequestDTO monitoriaRequestDTO);
 
     @Mapping(source = "professor", target = "professorResponseDTO")
-    @Mapping(source = "selecionados", target = "selecionadosResponseDTO")
-    @Mapping(source = "inscritos", target = "inscritosResponseDTO")
     @Mapping(source = "processoSeletivo", target = "processoSeletivoResponseDTO")
-    @Mapping(source = "atividades", target = "atividadesResponseDTO")
+    @Mapping(source = "disciplina", target = "disciplinaResponseDTO")
+    @Mapping(source = "inscricoes", target = "monitoriaInscritosResponseDTO")
     public abstract MonitoriaResponseDTO toResponseDTO( Monitoria monitoria);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

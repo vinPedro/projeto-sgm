@@ -29,9 +29,4 @@ public class Instituicao {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "instituicao")
-    private List<Curso> cursos = new ArrayList<>();
-
-    @OneToMany(mappedBy = "instituicao")
-    private List<ProcessoSeletivo> processos = new ArrayList<>();
 }

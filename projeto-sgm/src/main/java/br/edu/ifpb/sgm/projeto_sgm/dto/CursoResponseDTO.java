@@ -13,6 +13,5 @@ public class CursoResponseDTO {
     private NivelCurso nivel;
     private int duracao; // em semestres, por exemplo
     private InstituicaoResponseDTO instituicaoResponseDTO;
-    private CoordenadorResponseDTO coordenadorResponseDTO;
-    private List<DisciplinaResponseDTO> disciplinasResponseDTO;
+
 }

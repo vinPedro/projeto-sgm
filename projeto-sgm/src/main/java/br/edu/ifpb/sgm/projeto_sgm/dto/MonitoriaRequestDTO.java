@@ -11,8 +11,7 @@ public class MonitoriaRequestDTO {
     private int numeroVagaBolsa;
     private int cargaHoraria;
     private Long professorId;
-    private List<Long> selecionadosId;
-    private List<Long> inscritosId;
+    private List<Long> inscricoesId;
     private Long processoSeletivoId;
-    private List<Long> atividadesId;
+
 }

@@ -12,8 +12,7 @@ public class MonitoriaResponseDTO {
     private int numeroVagaBolsa;
     private int cargaHoraria;
     private ProfessorResponseDTO professorResponseDTO;
-    private List<AlunoResponseDTO> selecionadosResponseDTO;
-    private List<AlunoResponseDTO> inscritosResponseDTO;
+    private List<MonitoriaInscritosResponseDTO> monitoriaInscritosResponseDTO;
     private ProcessoSeletivoResponseDTO processoSeletivoResponseDTO;
-    private List<AtividadeResponseDTO> atividadesResponseDTO;
+
 }
