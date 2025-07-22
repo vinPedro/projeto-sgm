@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Lazy;
 )
 public interface CursoMapper {
 
+    @Mapping(target = "instituicao", ignore = true)
     Curso toEntity(CursoRequestDTO CursoRequestDTO);
 
     @Mapping(source = "instituicao", target = "instituicaoResponseDTO")

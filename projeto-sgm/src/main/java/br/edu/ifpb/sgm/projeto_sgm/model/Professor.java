@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -24,10 +25,18 @@ public class Professor {
     @JoinColumn(name = "id")
     private Pessoa pessoa;
 
-    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
-    private Coordenador coordenador;
-
-    @OneToMany(mappedBy = "professor")
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "professor_id")
     private List<Disciplina> disciplinas = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "coordenador_curso",
+            joinColumns = @JoinColumn(name = "professor_id"),
+            inverseJoinColumns = @JoinColumn(name = "curso_id")
+    )
+    private Set<Curso> cursos;
+
+    @Column
+    private Boolean cadastrado = true;
 }

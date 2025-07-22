@@ -9,5 +9,9 @@ public class PessoaRequestDTO {
     protected String nome;
     protected String email;
     protected String emailAcademico;
+    protected String matricula;
     protected Long instituicaoId;
+    protected String senha;
+
+
 }

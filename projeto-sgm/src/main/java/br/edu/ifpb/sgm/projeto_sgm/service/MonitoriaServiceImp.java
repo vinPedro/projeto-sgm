@@ -36,6 +36,9 @@ public class MonitoriaServiceImp {
     private ProcessoSeletivoRepository processoSeletivoRepository;
 
     @Autowired
+    private MonitoriaInscricoesRepository monitoriaInscricoesRepository;
+
+    @Autowired
     private AtividadeRepository atividadeRepository;
 
     @Autowired
@@ -46,10 +49,8 @@ public class MonitoriaServiceImp {
 
         monitoria.setDisciplina(buscarDisciplina(dto.getDisciplinaId()));
         monitoria.setProfessor(buscarProfessor(dto.getProfessorId()));
-        monitoria.setSelecionados(buscarAlunos(dto.getSelecionadosId()));
-        monitoria.setInscritos(buscarAlunos(dto.getInscritosId()));
         monitoria.setProcessoSeletivo(buscarProcesso(dto.getProcessoSeletivoId()));
-        monitoria.setAtividades(buscarAtividades(dto.getAtividadesId()));
+        monitoria.setInscricoes(buscarInscritosMonitoria(dto.getInscricoesId()));
 
         Monitoria salva = monitoriaRepository.save(monitoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(monitoriaMapper.toResponseDTO(salva));
@@ -83,21 +84,16 @@ public class MonitoriaServiceImp {
             monitoria.setProfessor(buscarProfessor(dto.getProfessorId()));
         }
 
-        if (dto.getSelecionadosId() != null) {
-            monitoria.setSelecionados(buscarAlunos(dto.getSelecionadosId()));
+        if (dto.getInscricoesId() != null) {
+            monitoria.setInscricoes(buscarInscritosMonitoria(dto.getInscricoesId()));
         }
 
-        if (dto.getInscritosId() != null) {
-            monitoria.setInscritos(buscarAlunos(dto.getInscritosId()));
-        }
 
         if (dto.getProcessoSeletivoId() != null) {
             monitoria.setProcessoSeletivo(buscarProcesso(dto.getProcessoSeletivoId()));
         }
 
-        if (dto.getAtividadesId() != null) {
-            monitoria.setAtividades(buscarAtividades(dto.getAtividadesId()));
-        }
+
 
         Monitoria atualizada = monitoriaRepository.save(monitoria);
         return ResponseEntity.ok(monitoriaMapper.toResponseDTO(atualizada));
@@ -122,41 +118,25 @@ public class MonitoriaServiceImp {
                 .orElseThrow(() -> new ProfessorNotFoundException("Professor com ID " + id + " não encontrado."));
     }
 
-    private List<Aluno> buscarAlunos(List<Long> ids) {
-        if (ids == null || ids.isEmpty()) return Collections.emptyList();
-
-        List<Long> idsNaoEncontrados = ids.stream()
-                .filter(id -> alunoRepository.findById(id).isEmpty())
-                .toList();
-
-        if (!idsNaoEncontrados.isEmpty()) {
-            throw new AlunoNotFoundException("IDs de alunos inválidos: " + idsNaoEncontrados);
-        }
-
-        return ids.stream()
-                .map(id -> alunoRepository.findById(id).get())
-                .collect(Collectors.toList());
-    }
 
     private ProcessoSeletivo buscarProcesso(Long id) {
         return processoSeletivoRepository.findById(id)
                 .orElseThrow(() -> new ProcessoSeletivoNotFoundException("Processo seletivo com ID " + id + " não encontrado."));
     }
 
-    private List<Atividade> buscarAtividades(List<Long> ids) {
+    private List<MonitoriaInscritos> buscarInscritosMonitoria(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
 
         List<Long> idsNaoEncontrados = ids.stream()
-                .filter(id -> atividadeRepository.findById(id).isEmpty())
+                .filter(id -> monitoriaInscricoesRepository.findById(id).isEmpty())
                 .toList();
 
         if (!idsNaoEncontrados.isEmpty()) {
-            throw new AtividadeNotFoundException("IDs de atividades inválidos: " + idsNaoEncontrados);
+            throw new MonitoriaNotFoundException("IDs de disciplinas inválidos: " + idsNaoEncontrados);
         }
 
         return ids.stream()
-                .map(id -> atividadeRepository.findById(id).get())
+                .map(id -> monitoriaInscricoesRepository.findById(id).get())
                 .collect(Collectors.toList());
-
     }
 }

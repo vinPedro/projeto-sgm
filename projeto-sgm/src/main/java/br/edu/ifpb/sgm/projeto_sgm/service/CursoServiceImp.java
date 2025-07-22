@@ -5,7 +5,6 @@ import br.edu.ifpb.sgm.projeto_sgm.dto.CursoResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.exception.*;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.CursoMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.*;
-import br.edu.ifpb.sgm.projeto_sgm.repository.CoordenadorRepository;
 import br.edu.ifpb.sgm.projeto_sgm.repository.CursoRepository;
 import br.edu.ifpb.sgm.projeto_sgm.repository.DisciplinaRepository;
 import br.edu.ifpb.sgm.projeto_sgm.repository.InstituicaoRepository;
@@ -30,9 +29,6 @@ public class CursoServiceImp {
     private InstituicaoRepository instituicaoRepository;
 
     @Autowired
-    private CoordenadorRepository coordenadorRepository;
-
-    @Autowired
     private DisciplinaRepository disciplinaRepository;
 
     @Autowired
@@ -44,10 +40,7 @@ public class CursoServiceImp {
         Curso curso = cursoMapper.toEntity(dto);
 
         curso.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
-        curso.setCoordenador(buscarCoordenador(dto.getCoordenadorID()));
-        curso.setDisciplinas(buscarDisciplinas(dto.getDisciplinasId()));
         curso.setNivel(NivelCurso.valueOf(dto.getNivelString()));
-
         Curso salvo = cursoRepository.save(curso);
         return ResponseEntity.status(HttpStatus.CREATED).body(cursoMapper.toResponseDTO(salvo));
     }
@@ -78,14 +71,6 @@ public class CursoServiceImp {
             curso.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
         }
 
-        if (dto.getCoordenadorID() != null) {
-            curso.setCoordenador(buscarCoordenador(dto.getCoordenadorID()));
-        }
-
-        if (dto.getDisciplinasId() != null) {
-            curso.setDisciplinas(buscarDisciplinas(dto.getDisciplinasId()));
-        }
-
         if (dto.getNivelString() != null) {
             curso.setNivel(NivelCurso.valueOf(dto.getNivelString()));
         }
@@ -107,24 +92,4 @@ public class CursoServiceImp {
                 .orElseThrow(() -> new InstituicaoNotFoundException("Instituição com ID " + id + " não encontrada."));
     }
 
-    private Coordenador buscarCoordenador(Long id) {
-        return coordenadorRepository.findById(id)
-                .orElseThrow(() -> new CoordenadorNotFoundException("Coordenador com ID " + id + " não encontrado."));
-    }
-
-    private List<Disciplina> buscarDisciplinas(List<Long> ids) {
-        if (ids == null || ids.isEmpty()) return Collections.emptyList();
-
-        List<Long> idsNaoEncontrados = ids.stream()
-                .filter(id -> disciplinaRepository.findById(id).isEmpty())
-                .toList();
-
-        if (!idsNaoEncontrados.isEmpty()) {
-            throw new DisciplinaNotFoundException("IDs de disciplinas inválidos: " + idsNaoEncontrados);
-        }
-
-        return ids.stream()
-                .map(id -> disciplinaRepository.findById(id).get())
-                .collect(Collectors.toList());
-    }
 }

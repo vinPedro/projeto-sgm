@@ -40,10 +40,6 @@ public class InstituicaoServiceImp {
 
     public ResponseEntity<InstituicaoResponseDTO> salvar(InstituicaoRequestDTO dto) {
         Instituicao instituicao = instituicaoMapper.toEntity(dto);
-
-        instituicao.setCursos(buscarCursos(dto.getCursosId()));
-        instituicao.setProcessos(buscarProcessos(dto.getProcessosId()));
-
         Instituicao salva = instituicaoRepository.save(instituicao);
         return ResponseEntity.status(HttpStatus.CREATED).body(instituicaoMapper.toResponseDTO(salva));
     }
@@ -67,14 +63,6 @@ public class InstituicaoServiceImp {
                 .orElseThrow(() -> new InstituicaoNotFoundException("Instituição com ID " + id + " não encontrada."));
 
         instituicaoMapper.updateInstituicaoFromDto(dto, instituicao);
-
-        if (dto.getCursosId() != null) {
-            instituicao.setCursos(buscarCursos(dto.getCursosId()));
-        }
-
-        if (dto.getProcessosId() != null) {
-            instituicao.setProcessos(buscarProcessos(dto.getProcessosId()));
-        }
 
         Instituicao atualizada = instituicaoRepository.save(instituicao);
         return ResponseEntity.ok(instituicaoMapper.toResponseDTO(atualizada));

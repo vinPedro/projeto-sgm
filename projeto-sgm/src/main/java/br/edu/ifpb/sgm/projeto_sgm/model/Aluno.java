@@ -20,16 +20,10 @@ public class Aluno {
     @Id
     protected Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id")
     private Pessoa pessoa;
-
-    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
-    private Monitor monitor;
-
-    @Column(length = 12, nullable = false, unique = true)
-    protected String matricula;
 
     @ManyToMany
     @JoinTable(
@@ -38,4 +32,15 @@ public class Aluno {
         inverseJoinColumns = @JoinColumn(name = "disciplina_id")
     )
     private Set<Disciplina> disciplinasPagas = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "monitor_disciplinas",
+            joinColumns = @JoinColumn(name = "aluno_id"),
+            inverseJoinColumns = @JoinColumn(name = "disciplina_id")
+    )
+    private Set<Disciplina> disciplinaMonitoria = new HashSet<>();
+
+    @Column
+    private Boolean cadastrado = true;
 }

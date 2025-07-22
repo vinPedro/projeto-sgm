@@ -1,18 +1,21 @@
 package br.edu.ifpb.sgm.projeto_sgm.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pessoa {
+public class Pessoa implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,21 +29,60 @@ public class Pessoa {
 
     @Column(nullable = false, unique = true)
     protected String email;
-    @Column(unique = true)
+
+    @Column(nullable = false, unique = true)
     protected String emailAcademico;
 
     @ManyToOne(optional = false)
     protected Instituicao instituicao;
 
-    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
-    private Aluno aluno;
+    @Column(length = 12, nullable = false, unique = true)
+    protected String matricula;
 
-    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
-    private Professor professor;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "tb_pessoa_role",
+            joinColumns = @JoinColumn(name="pessoa_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 
-    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
-    private Monitor monitor;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @Column(nullable = false, length = 60)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String senha;
 
-    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
-    private Coordenador coordenador;
+    public void setSenha(String senha) {
+        this.senha = senha; // você pode aplicar regras aqui
+    }
+
+    public String getSenha() {
+        throw new UnsupportedOperationException("Acesso ao campo senha não permitido.");
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
+    @Override
+    public String getUsername() {
+        return matricula;
+    }
+
+    public String[] arrayRoles() {
+        int size = roles.size();
+        String[] array = new String[size];
+
+        for(int i = 0; i < size; i++) {
+            array[i] = roles.get(i).getRole();
+        }
+        return array;
+    }
 }

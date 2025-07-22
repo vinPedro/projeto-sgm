@@ -40,8 +40,7 @@ public class ProcessoSeletivoServiceImp {
 
     public ResponseEntity<ProcessoSeletivoResponseDTO> salvar(ProcessoSeletivoRequestDTO dto) {
         ProcessoSeletivo processo = processoSeletivoMapper.toEntity(dto);
-        processo.setInstituicao(buscarInstituicao(dto.getInstituicaoID()));
-        processo.setMonitorias(buscarMonitorias(dto.getMonitoriasId()));
+        processo.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
 
         ProcessoSeletivo salvo = processoSeletivoRepository.save(processo);
         return ResponseEntity.status(HttpStatus.CREATED).body(processoSeletivoMapper.toResponseDTO(salvo));
@@ -67,13 +66,10 @@ public class ProcessoSeletivoServiceImp {
 
         processoSeletivoMapper.updateProcessoSeletivoFromDto(dto, processo);
 
-        if (dto.getInstituicaoID() != null) {
-            processo.setInstituicao(buscarInstituicao(dto.getInstituicaoID()));
+        if (dto.getInstituicaoId() != null) {
+            processo.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
         }
 
-        if (dto.getMonitoriasId() != null) {
-            processo.setMonitorias(buscarMonitorias(dto.getMonitoriasId()));
-        }
 
         ProcessoSeletivo atualizado = processoSeletivoRepository.save(processo);
         return ResponseEntity.ok(processoSeletivoMapper.toResponseDTO(atualizado));

@@ -14,5 +14,6 @@ public class AlunoResponseDTO{
     protected InstituicaoResponseDTO instituicaoResponseDTO;
     protected String matricula;
     private Set<DisciplinaResponseDTO> disciplinasPagasResponseDTO;
+    private Set<DisciplinaResponseDTO> disciplinasMonitoriaResponseDTO;
 
 }

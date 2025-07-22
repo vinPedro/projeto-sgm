@@ -10,8 +10,10 @@ public class AlunoRequestDTO{
     protected String nome;
     protected String email;
     protected String emailAcademico;
+    private String senha;
     protected Long instituicaoId;
     protected String matricula;
     private Set<Long> disciplinasPagasId;
+    private Set<Long> disciplinasMonitoriaId;
 
 }

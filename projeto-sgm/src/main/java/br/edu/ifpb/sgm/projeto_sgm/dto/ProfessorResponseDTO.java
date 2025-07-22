@@ -11,6 +11,8 @@ public class ProfessorResponseDTO{
     protected String nome;
     protected String email;
     protected String emailAcademico;
+    protected String matricula;
     protected InstituicaoResponseDTO instituicaoResponseDTO;
     private List<DisciplinaResponseDTO> disciplinasResponseDTO;
+    private List<CursoResponseDTO> cursosResponseDTO;
 }

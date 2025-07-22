@@ -6,12 +6,15 @@ import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.AlunoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.AlunoMapper;
+import br.edu.ifpb.sgm.projeto_sgm.mapper.PessoaMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.Aluno;
 import br.edu.ifpb.sgm.projeto_sgm.model.Disciplina;
 import br.edu.ifpb.sgm.projeto_sgm.model.Instituicao;
+import br.edu.ifpb.sgm.projeto_sgm.model.Pessoa;
 import br.edu.ifpb.sgm.projeto_sgm.repository.AlunoRepository;
 import br.edu.ifpb.sgm.projeto_sgm.repository.DisciplinaRepository;
 import br.edu.ifpb.sgm.projeto_sgm.repository.InstituicaoRepository;
+import br.edu.ifpb.sgm.projeto_sgm.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,9 @@ public class AlunoServiceImp {
     private AlunoRepository alunoRepository;
 
     @Autowired
+    private PessoaRepository pessoaRepository;
+
+    @Autowired
     private DisciplinaRepository disciplinaRepository;
 
     @Autowired
@@ -39,11 +45,21 @@ public class AlunoServiceImp {
     @Autowired
     private AlunoMapper alunoMapper;
 
+    @Autowired
+    private PessoaMapper pessoaMapper;
+
 
     public ResponseEntity<AlunoResponseDTO> salvar(AlunoRequestDTO alunoRequestDTO){
-        Aluno aluno = alunoMapper.toEntity(alunoRequestDTO);
-        aluno.setInstituicao(buscarInstituicao(alunoRequestDTO.getInstituicaoId()));
+
+        Pessoa pessoa = pessoaMapper.fromPessoa(alunoRequestDTO);
+        pessoa.setInstituicao(buscarInstituicao(alunoRequestDTO.getInstituicaoId()));
+        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
+
+        Aluno aluno = new Aluno();
         aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
+        aluno.setDisciplinaMonitoria(buscarDisciplinas(alunoRequestDTO.getDisciplinasMonitoriaId()));
+        aluno.setPessoa(pessoaSalva);
+
         Aluno salvo = alunoRepository.save(aluno);
         return ResponseEntity.status(HttpStatus.CREATED).body(alunoMapper.toResponseDTO(salvo));
     }
@@ -62,7 +78,27 @@ public class AlunoServiceImp {
         return ResponseEntity.ok(dtos);
     }
 
+    public ResponseEntity<List<AlunoResponseDTO>> listarTodosCadastrados() {
+        List<Aluno> alunos = alunoRepository.findByCadastradoTrue();
+        List<AlunoResponseDTO> dtos = alunos.stream()
+                .map(alunoMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
     public ResponseEntity<AlunoResponseDTO> atualizar(Long id, AlunoRequestDTO dto) {
+
+        Pessoa pessoa = pessoaRepository.findById(id)
+                .orElseThrow(AlunoNotFoundException::new);
+
+        Pessoa pesssoaAtualizada = pessoaMapper.fromPessoa(dto);
+
+        if (dto.getInstituicaoId() != null) {
+            pesssoaAtualizada.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
+        }
+
+        pessoaMapper.updatePessoaFromPessoa(pesssoaAtualizada, pessoa);
+
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(AlunoNotFoundException::new);
         alunoMapper.updateAlunoFromDto(dto, aluno);
@@ -71,6 +107,13 @@ public class AlunoServiceImp {
             aluno.setDisciplinasPagas(buscarDisciplinas(dto.getDisciplinasPagasId()));
         }
 
+        if (dto.getDisciplinasMonitoriaId() != null) {
+            aluno.setDisciplinaMonitoria(buscarDisciplinas(dto.getDisciplinasMonitoriaId()));
+        }
+
+        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
+        aluno.setPessoa(pessoaSalva);
+
         Aluno atualizado = alunoRepository.save(aluno);
         return ResponseEntity.ok(alunoMapper.toResponseDTO(atualizado));
     }
@@ -78,8 +121,25 @@ public class AlunoServiceImp {
     public ResponseEntity<Void> deletar(Long id) {
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(AlunoNotFoundException::new);
-        alunoRepository.delete(aluno);
+        aluno.setCadastrado(false);
+        aluno.setDisciplinaMonitoria(null);
+
+        alunoRepository.save(aluno);
+
         return ResponseEntity.noContent().build();
+    }
+
+    public ResponseEntity<AlunoResponseDTO> associar(Long id, AlunoRequestDTO alunoRequestDTO){
+        Pessoa pessoa = pessoaRepository.findById(id).orElseThrow();
+
+        Aluno aluno = new Aluno();
+
+        aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
+        aluno.setDisciplinaMonitoria(buscarDisciplinas(alunoRequestDTO.getDisciplinasMonitoriaId()));
+        aluno.setPessoa(pessoa);
+
+        Aluno salvo = alunoRepository.save(aluno);
+        return ResponseEntity.status(HttpStatus.CREATED).body(alunoMapper.toResponseDTO(salvo));
     }
 
     private Set<Disciplina> buscarDisciplinas(Set<Long> ids) {

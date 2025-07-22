@@ -14,16 +14,17 @@ import org.springframework.context.annotation.Lazy;
 public interface ProfessorMapper {
 
     @Mapping(target = "pessoa", ignore = true)
-    @Mapping(target = "coordenador", ignore = true)
     Professor toEntity(ProfessorRequestDTO professorRequestDTO);
 
     @Mapping(source = "disciplinas", target = "disciplinasResponseDTO")
+    @Mapping(source = "cursos", target = "cursosResponseDTO")
     @Mapping(source = "pessoa.id", target = "id")
     @Mapping(source = "pessoa.cpf", target = "cpf")
     @Mapping(source = "pessoa.nome", target = "nome")
     @Mapping(source = "pessoa.email", target = "email")
+    @Mapping(source = "pessoa.matricula", target = "matricula")
     @Mapping(source = "pessoa.emailAcademico", target = "emailAcademico")
-    @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
+    @Mapping(source = "pessoa.instituicao", target = "instituicaoResponseDTO")
     ProfessorResponseDTO toResponseDTO(Professor professor);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

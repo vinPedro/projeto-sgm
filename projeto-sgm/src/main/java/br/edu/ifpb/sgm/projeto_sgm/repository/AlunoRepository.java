@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
-    Optional<Aluno> findByMatricula(String matricula);
-    List<Aluno> findByNomeContainingIgnoreCase(String nome);
+
+    List<Aluno> findByCadastradoTrue();
+
+//    Optional<Aluno> findByMatricula(String matricula);
+//    List<Aluno> findByNomeContainingIgnoreCase(String nome);
 //    List<Aluno> findByDisciplinasPagas_Id(Long disciplinaId);
 
 //    //Buscar todos alunos inscritos em uma monitoria específica
