@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,7 +46,10 @@ public class Pessoa implements UserDetails {
             joinColumns = @JoinColumn(name="pessoa_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
+
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    private Aluno aluno;
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -54,7 +58,7 @@ public class Pessoa implements UserDetails {
     private String senha;
 
     public void setSenha(String senha) {
-        this.senha = senha; // você pode aplicar regras aqui
+        this.senha = senha;
     }
 
     public String getSenha() {

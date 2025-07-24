@@ -7,14 +7,8 @@ import br.edu.ifpb.sgm.projeto_sgm.exception.AlunoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.AlunoMapper;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.PessoaMapper;
-import br.edu.ifpb.sgm.projeto_sgm.model.Aluno;
-import br.edu.ifpb.sgm.projeto_sgm.model.Disciplina;
-import br.edu.ifpb.sgm.projeto_sgm.model.Instituicao;
-import br.edu.ifpb.sgm.projeto_sgm.model.Pessoa;
-import br.edu.ifpb.sgm.projeto_sgm.repository.AlunoRepository;
-import br.edu.ifpb.sgm.projeto_sgm.repository.DisciplinaRepository;
-import br.edu.ifpb.sgm.projeto_sgm.repository.InstituicaoRepository;
-import br.edu.ifpb.sgm.projeto_sgm.repository.PessoaRepository;
+import br.edu.ifpb.sgm.projeto_sgm.model.*;
+import br.edu.ifpb.sgm.projeto_sgm.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +20,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.DISCENTE;
+
 @Service
 @Transactional
 public class AlunoServiceImp {
 
     @Autowired
     private AlunoRepository alunoRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PessoaRepository pessoaRepository;
@@ -50,11 +49,13 @@ public class AlunoServiceImp {
 
 
     public ResponseEntity<AlunoResponseDTO> salvar(AlunoRequestDTO alunoRequestDTO){
-
         Pessoa pessoa = pessoaMapper.fromPessoa(alunoRequestDTO);
         pessoa.setInstituicao(buscarInstituicao(alunoRequestDTO.getInstituicaoId()));
-        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
 
+        Role alunoRole = roleRepository.findByRole("ROLE_" + DISCENTE)
+                .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role DISCENTE não encontrada no banco!"));
+        pessoa.setRoles(List.of(alunoRole));
+        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
         Aluno aluno = new Aluno();
         aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
         aluno.setDisciplinaMonitoria(buscarDisciplinas(alunoRequestDTO.getDisciplinasMonitoriaId()));

@@ -17,10 +17,4 @@ public class PessoaResponseDTO {
     protected InstituicaoResponseDTO instituicaoResponseDTO;
     protected List<Role> roles;
 
-    public PessoaResponseDTO(Long id, String nome, String cpf, String matricula) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.matricula = matricula;
-    }
 }

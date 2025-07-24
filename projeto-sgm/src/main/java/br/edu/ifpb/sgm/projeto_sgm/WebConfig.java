@@ -23,8 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
 
-import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.ADMIN;
-import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.COORDENADOR;
+import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.*;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer{
@@ -62,27 +61,32 @@ public class WebConfig implements WebMvcConfigurer{
         return authConfig.getAuthenticationManager();
     }
 
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
-                //retirar, só serve para o h2 ----
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin())
                 )
-                //limite -----
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/user/register").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.POST, "/api/user/basicregister").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/user/delete/**").hasRole(ADMIN)
-                        .requestMatchers("/api/user/list").hasAnyRole(ADMIN, COORDENADOR)
-                        .requestMatchers(HttpMethod.PUT, "/api/user/update/**").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.PUT, "/api/user/updatenorules/**")
-
-                        .hasAnyRole(ADMIN, COORDENADOR)
+                        .requestMatchers("/api/instituicoes/**").hasRole(ADMIN)
+                        .requestMatchers("/api/cursos/**").hasAnyRole(ADMIN, COORDENADOR)
+                        .requestMatchers(HttpMethod.GET, "/api/disciplinas/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE)
+                        .requestMatchers("/api/disciplinas/**").hasAnyRole(ADMIN, COORDENADOR)
+                        .requestMatchers("/api/processos-seletivos/**").hasAnyRole(ADMIN, COORDENADOR)
+                        .requestMatchers("/api/monitorias/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE)
+                        .requestMatchers(HttpMethod.GET, "/api/atividades/**").authenticated()
+                        .requestMatchers("/api/atividades/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE, DISCENTE)
+                        .requestMatchers(HttpMethod.GET, "/api/professores/**").authenticated()
+                        .requestMatchers("/api/professores/**").hasAnyRole(ADMIN, COORDENADOR)
+                        .requestMatchers(HttpMethod.POST, "/api/alunos").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/alunos/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE)
+                        .requestMatchers(HttpMethod.PUT, "/api/alunos/{id}").hasAnyRole(ADMIN, COORDENADOR, DISCENTE)
+                        .requestMatchers("/api/alunos/**").hasAnyRole(ADMIN, COORDENADOR)
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
@@ -98,7 +102,6 @@ public class WebConfig implements WebMvcConfigurer{
                             @Override
                             public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
                                     throws IOException, ServletException {
-                                //Em caso de sucesso no logout, não faz nada
                                 response.setStatus(HttpServletResponse.SC_OK);
                                 response.getWriter().write("Logout realizado com sucesso!");
                             }

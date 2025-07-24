@@ -82,11 +82,10 @@ public class PessoaServiceImp implements UserDetailsService {
     }
 
     public PessoaResponseDTO findDtoByMatricula(String matricula) {
-        PessoaResponseDTO user = pessoaRepository.findByDTOMatricula(matricula)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
-        List<Role> roles = pessoaRepository.listRole(user.getId());
-        user.setRoles(roles);
-        return user;
+        Pessoa pessoa = pessoaRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + matricula));
+
+        return pessoaMapper.toResponseDTO(pessoa);
     }
 
     @Override
