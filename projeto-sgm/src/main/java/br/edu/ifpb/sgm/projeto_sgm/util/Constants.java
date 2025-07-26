@@ -5,4 +5,5 @@ public class Constants {
     public static final String COORDENADOR = "COORDENADOR";
     public static final String DOCENTE= "DOCENTE";
     public static final String DISCENTE= "DISCENTE";
+    public static final String MONITOR= "MONITOR";
 }

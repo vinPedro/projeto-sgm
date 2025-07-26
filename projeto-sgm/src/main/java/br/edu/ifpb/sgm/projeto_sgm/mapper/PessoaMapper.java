@@ -37,6 +37,7 @@ public interface PessoaMapper {
     PessoaResponseDTO toResponseDTO(Pessoa pessoa);
 
     @Mapping(target = "authorities", ignore = true)
+    @Mapping(target = "senha", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updatePessoaFromPessoa(Pessoa pessoaAtualizada, @MappingTarget Pessoa entity);
 
