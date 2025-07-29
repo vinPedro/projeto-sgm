@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.DISCENTE;
+import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.DOCENTE;
+
 @Service
 @Transactional
 public class ProfessorServiceImp {
@@ -40,6 +43,9 @@ public class ProfessorServiceImp {
     private PessoaRepository pessoaRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private CursoRepository cursoRepository;
 
     @Autowired
@@ -51,6 +57,11 @@ public class ProfessorServiceImp {
     public ResponseEntity<ProfessorResponseDTO> salvar(ProfessorRequestDTO dto) {
         Pessoa pessoa = pessoaMapper.fromPessoa(dto);
         pessoa.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
+
+        Role professorRole = roleRepository.findByRole("ROLE_" + DOCENTE)
+                .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role DISCENTE não encontrada no banco!"));
+        pessoa.setRoles(List.of(professorRole));
+
         Pessoa pessoaSalva = pessoaRepository.save(pessoa);
 
         Professor professor = new Professor();
