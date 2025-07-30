@@ -31,6 +31,11 @@ public class DisciplinaControllerImp {
         return disciplinaService.listarTodos();
     }
 
+    @GetMapping("/null-Professores")
+    public ResponseEntity<List<DisciplinaResponseDTO>> listarDisciplinasSemProfessor() {
+        return disciplinaService.listarDisciplinasSemProfessor();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<DisciplinaResponseDTO> atualizar(@PathVariable Long id, @RequestBody DisciplinaRequestDTO dto) {
         return disciplinaService.atualizar(id, dto);

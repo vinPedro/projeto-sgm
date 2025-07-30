@@ -57,6 +57,14 @@ public class DisciplinaServiceImp {
         return ResponseEntity.ok(dtos);
     }
 
+    public ResponseEntity<List<DisciplinaResponseDTO>> listarDisciplinasSemProfessor() {
+        List<Disciplina> disciplinas = disciplinaRepository.buscarDisciplinasSemProfessor();
+        List<DisciplinaResponseDTO> dtos = disciplinas.stream()
+                .map(disciplinaMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
     public ResponseEntity<DisciplinaResponseDTO> atualizar(Long id, DisciplinaRequestDTO dto) {
         Disciplina disciplina = disciplinaRepository.findById(id)
                 .orElseThrow(() -> new DisciplinaNotFoundException("Disciplina com ID " + id + " não encontrada."));
