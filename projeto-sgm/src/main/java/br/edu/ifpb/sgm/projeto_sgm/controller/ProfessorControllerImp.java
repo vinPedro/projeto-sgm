@@ -1,9 +1,6 @@
 package br.edu.ifpb.sgm.projeto_sgm.controller;
 
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.dto.*;
 import br.edu.ifpb.sgm.projeto_sgm.model.Professor;
 import br.edu.ifpb.sgm.projeto_sgm.service.ProfessorServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +26,11 @@ public class ProfessorControllerImp {
         return professorService.salvar(dto);
     }
 
+    @PostMapping("/coordenadores")
+    public ResponseEntity<ProfessorResponseDTO> criarCoordenador(@RequestBody CoordenadorRequestDTO dto) {
+        return professorService.salvarProfessorCoordenador(dto);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProfessorResponseDTO> buscarPorId(@PathVariable Long id) {
         return professorService.buscarPorId(id);
@@ -37,6 +39,11 @@ public class ProfessorControllerImp {
     @GetMapping("/cadastros")
     public ResponseEntity<List<ProfessorResponseDTO>> listarTodos() {
         return professorService.listarTodos();
+    }
+
+    @GetMapping("/coordenadores")
+    public ResponseEntity<List<ProfessorResponseDTO>> listarTodosCoordenadores() {
+        return professorService.buscarCoordenadores();
     }
 
     @GetMapping

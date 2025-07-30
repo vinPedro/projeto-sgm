@@ -1,9 +1,6 @@
 package br.edu.ifpb.sgm.projeto_sgm.service;
 
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.dto.*;
 import br.edu.ifpb.sgm.projeto_sgm.exception.AlunoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
@@ -23,8 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.DISCENTE;
-import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.DOCENTE;
+import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.*;
 
 @Service
 @Transactional
@@ -151,6 +147,45 @@ public class ProfessorServiceImp {
         professor.setPessoa(pessoa);
 
         Professor salvo = professorRepository.save(professor);
+        return ResponseEntity.status(HttpStatus.CREATED).body(professorMapper.toResponseDTO(salvo));
+    }
+
+    public ResponseEntity<List<ProfessorResponseDTO>> buscarCoordenadores(){
+        List<Professor> professores = professorRepository.findProfessoresComCurso();
+        List<ProfessorResponseDTO> dtos = professores.stream()
+                .map(professorMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    public ResponseEntity<List<ProfessorResponseDTO>> buscarProfessoresSemCoordenacao(){
+        List<Professor> professores = professorRepository.findProfessoresSemCurso();
+        List<ProfessorResponseDTO> dtos = professores.stream()
+                .map(professorMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    public ResponseEntity<ProfessorResponseDTO> salvarProfessorCoordenador(CoordenadorRequestDTO dto) {
+        Pessoa pessoa = pessoaRepository.findById(dto.getId()).orElseThrow();
+
+        Professor professor = professorRepository.findById(dto.getId())
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor com ID " + dto.getId() + " não encontrado."));
+
+        Role coordenadorRole = roleRepository.findByRole("ROLE_" + COORDENADOR)
+                .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role COORDENADOR não encontrada no banco!"));
+
+        if (dto.getCursosId() != null) {
+            professor.setCursos(buscarCursos(dto.getCursosId()));
+            pessoa.getRoles().add(coordenadorRole);
+        }
+
+        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
+
+        professor.setPessoa(pessoaSalva);
+
+        Professor salvo = professorRepository.save(professor);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(professorMapper.toResponseDTO(salvo));
     }
 
