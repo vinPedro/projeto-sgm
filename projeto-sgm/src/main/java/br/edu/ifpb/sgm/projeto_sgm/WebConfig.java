@@ -41,7 +41,6 @@ public class WebConfig implements WebMvcConfigurer{
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:5173") // permite sua aplicação React
-                        .allowedOrigins("http://localhost:5173")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                         .allowedHeaders("Authorization", "Content-Type")
                         .allowedHeaders("*")
@@ -78,7 +77,7 @@ public class WebConfig implements WebMvcConfigurer{
                         .requestMatchers(HttpMethod.GET, "/api/disciplinas/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE)
                         .requestMatchers("/api/disciplinas/**").hasAnyRole(ADMIN, COORDENADOR)
                         .requestMatchers("/api/processos-seletivos/**").hasAnyRole(ADMIN, COORDENADOR)
-                        .requestMatchers("/api/monitorias/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE)
+                        .requestMatchers("/api/monitorias/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE, MONITOR)
                         .requestMatchers(HttpMethod.GET, "/api/atividades/**").authenticated()
                         .requestMatchers("/api/atividades/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE, DISCENTE)
                         .requestMatchers(HttpMethod.GET, "/api/professores/**").authenticated()

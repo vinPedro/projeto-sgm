@@ -73,6 +73,9 @@ public class TestService {
         if (roleRepository.findByRole("ROLE_" + DISCENTE).isEmpty()) {
             roleRepository.save(new Role(null, "ROLE_" + DISCENTE));
         }
+        if (roleRepository.findByRole("ROLE_" + MONITOR).isEmpty()) {
+            roleRepository.save(new Role(null, "ROLE_" + MONITOR));
+        }
     }
 
     private String encriptPassword(String senha) {
@@ -96,7 +99,7 @@ public class TestService {
         admin.setMatricula("admin");
         admin.setSenha(encriptPassword("admin123"));
         admin.setInstituicao(instituicao);
-        admin.setRoles(List.of(roleRepository.findByRole("ROLE_" + ADMIN).orElseThrow(() -> new RuntimeException("Role ADMIN não encontrada!"))));
+        admin.setRoles((roleRepository.findAll()));
         pessoaRepository.save(admin);
 
         Pessoa coordenador = new Pessoa();

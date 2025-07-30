@@ -49,12 +49,14 @@ public class AlunoServiceImp {
 
 
     public ResponseEntity<AlunoResponseDTO> salvar(AlunoRequestDTO alunoRequestDTO){
+
         Pessoa pessoa = pessoaMapper.fromPessoa(alunoRequestDTO);
         pessoa.setInstituicao(buscarInstituicao(alunoRequestDTO.getInstituicaoId()));
 
         Role alunoRole = roleRepository.findByRole("ROLE_" + DISCENTE)
                 .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role DISCENTE não encontrada no banco!"));
         pessoa.setRoles(List.of(alunoRole));
+
         Pessoa pessoaSalva = pessoaRepository.save(pessoa);
         Aluno aluno = new Aluno();
         aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));

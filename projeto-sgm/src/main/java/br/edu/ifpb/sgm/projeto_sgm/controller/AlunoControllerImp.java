@@ -43,9 +43,6 @@ public class AlunoControllerImp {
 
     @PutMapping("/{id}")
     public ResponseEntity<AlunoResponseDTO> atualizar(@PathVariable Long id, @RequestBody AlunoRequestDTO dto) {
-        if(dto.getSenha() != null){
-            encriptPassword(dto);
-        }
         return alunoService.atualizar(id, dto);
     }
 
