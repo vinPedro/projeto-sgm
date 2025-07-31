@@ -31,6 +31,11 @@ public class CursoControllerImp {
         return cursoService.listarTodos();
     }
 
+    @GetMapping("/null-coordenadores")
+    public ResponseEntity<List<CursoResponseDTO>> listarCursoNullCoordenador() {
+        return cursoService.listarCursoNullCoordenador();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<CursoResponseDTO> atualizar(@PathVariable Long id, @RequestBody CursoRequestDTO dto) {
         return cursoService.atualizar(id, dto);

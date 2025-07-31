@@ -124,17 +124,6 @@ public class ProfessorServiceImp {
         return ResponseEntity.ok(professorMapper.toResponseDTO(atualizado));
     }
 
-    public ResponseEntity<Void> deletar(Long id) {
-        Professor professor = professorRepository.findById(id)
-                .orElseThrow(ProfessorNotFoundException::new);
-        professor.setCadastrado(false);
-        professor.setCursos(null);
-
-        professorRepository.save(professor);
-
-        return ResponseEntity.noContent().build();
-    }
-
     public ResponseEntity<ProfessorResponseDTO> associar(Long id, ProfessorRequestDTO professorRequestDTO){
         Pessoa pessoa = pessoaRepository.findById(id).orElseThrow();
 
@@ -166,6 +155,18 @@ public class ProfessorServiceImp {
         return ResponseEntity.ok(dtos);
     }
 
+    public ResponseEntity<CoordenadorResponseDTO> buscarCoordenadorPorId(Long id) {
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor com ID " + id + " não encontrado."));
+        ProfessorResponseDTO professorResponseDTO = professorMapper.toResponseDTO(professor);
+
+        CoordenadorResponseDTO coordenadorResponseDTO = new CoordenadorResponseDTO();
+        coordenadorResponseDTO.setCursosResponseDTO(professorResponseDTO.getCursosResponseDTO());
+        coordenadorResponseDTO.setProfessorResponseDTO(professorResponseDTO);
+
+        return ResponseEntity.ok(coordenadorResponseDTO);
+    }
+
     public ResponseEntity<ProfessorResponseDTO> salvarProfessorCoordenador(CoordenadorRequestDTO dto) {
         Pessoa pessoa = pessoaRepository.findById(dto.getId()).orElseThrow();
 
@@ -187,6 +188,61 @@ public class ProfessorServiceImp {
         Professor salvo = professorRepository.save(professor);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(professorMapper.toResponseDTO(salvo));
+    }
+
+    public ResponseEntity<ProfessorResponseDTO> atualizarCoordenador(Long id, CoordenadorRequestDTO dto) {
+        Pessoa pessoa = pessoaRepository.findById(id).orElseThrow();
+
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor com ID " + id + " não encontrado."));
+
+
+
+        if (dto.getCursosId() == null) {
+            Role coordenadorRole = roleRepository.findByRole("ROLE_" + COORDENADOR)
+                    .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role COORDENADOR não encontrada no banco!"));
+
+            pessoa.getRoles().remove(coordenadorRole);
+        }
+
+        professor.setCursos(buscarCursos(dto.getCursosId()));
+        professor.setPessoa(pessoa);
+
+        Professor atualizado = professorRepository.save(professor);
+        return ResponseEntity.ok(professorMapper.toResponseDTO(atualizado));
+    }
+
+
+    public ResponseEntity<Void> deletar(Long id) {
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(ProfessorNotFoundException::new);
+        professor.setCadastrado(false);
+        professor.setCursos(null);
+
+        professorRepository.save(professor);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    public ResponseEntity<Void> deletarCoordenador(Long id) {
+        Pessoa pessoa = pessoaRepository.findById(id).orElseThrow();
+
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(ProfessorNotFoundException::new);
+
+        if (pessoa != null) {
+            Role coordenadorRole = roleRepository.findByRole("ROLE_" + COORDENADOR)
+                    .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role COORDENADOR não encontrada no banco!"));
+
+            pessoa.getRoles().remove(coordenadorRole);
+        }
+
+        professor.setPessoa(pessoa);
+        professor.setCursos(null);
+
+        professorRepository.save(professor);
+
+        return ResponseEntity.noContent().build();
     }
 
     // Auxiliar
