@@ -60,6 +60,14 @@ public class CursoServiceImp {
         return ResponseEntity.ok(dtos);
     }
 
+    public ResponseEntity<List<CursoResponseDTO>> listarCursoNullCoordenador() {
+        List<Curso> cursos = cursoRepository.findCursosSemProfessor();
+        List<CursoResponseDTO> dtos = cursos.stream()
+                .map(cursoMapper::toResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
 
     public ResponseEntity<CursoResponseDTO> atualizar(Long id, CursoRequestDTO dto) {
         Curso curso = cursoRepository.findById(id)

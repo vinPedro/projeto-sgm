@@ -1,9 +1,6 @@
 package br.edu.ifpb.sgm.projeto_sgm.controller;
 
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.dto.*;
 import br.edu.ifpb.sgm.projeto_sgm.model.Professor;
 import br.edu.ifpb.sgm.projeto_sgm.service.ProfessorServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +26,34 @@ public class ProfessorControllerImp {
         return professorService.salvar(dto);
     }
 
+    @PostMapping("/coordenadores")
+    public ResponseEntity<ProfessorResponseDTO> criarCoordenador(@RequestBody CoordenadorRequestDTO dto) {
+        return professorService.salvarProfessorCoordenador(dto);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProfessorResponseDTO> buscarPorId(@PathVariable Long id) {
         return professorService.buscarPorId(id);
     }
 
+    @GetMapping("/coordenadores/{id}")
+    public ResponseEntity<CoordenadorResponseDTO> buscarCoordenadorPorId(@PathVariable Long id) {
+        return professorService.buscarCoordenadorPorId(id);
+    }
+
     @GetMapping("/cadastros")
     public ResponseEntity<List<ProfessorResponseDTO>> listarTodos() {
         return professorService.listarTodos();
+    }
+
+    @GetMapping("/coordenadores")
+    public ResponseEntity<List<ProfessorResponseDTO>> listarTodosCoordenadores() {
+        return professorService.buscarCoordenadores();
+    }
+
+    @GetMapping("/null-coordenacao")
+    public ResponseEntity<List<ProfessorResponseDTO>> listarProfessoresNullCoordenacao() {
+        return professorService.buscarProfessoresSemCoordenacao();
     }
 
     @GetMapping
@@ -52,6 +69,11 @@ public class ProfessorControllerImp {
         return professorService.atualizar(id, dto);
     }
 
+    @PutMapping("/coordenadores/{id}")
+    public ResponseEntity<ProfessorResponseDTO> atualizar(@PathVariable Long id, @RequestBody CoordenadorRequestDTO dto) {
+        return professorService.atualizarCoordenador(id, dto);
+    }
+
     @PutMapping("/associar/{id}")
     public ResponseEntity<ProfessorResponseDTO> associar(@PathVariable Long id, @RequestBody ProfessorRequestDTO dto) {
         return professorService.associar(id, dto);
@@ -60,6 +82,11 @@ public class ProfessorControllerImp {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return professorService.deletar(id);
+    }
+
+    @DeleteMapping("/coordenadores/{id}")
+    public ResponseEntity<Void> deletarCoordenador(@PathVariable Long id) {
+        return professorService.deletarCoordenador(id);
     }
 
     private void encriptPassword(ProfessorRequestDTO dto) {
