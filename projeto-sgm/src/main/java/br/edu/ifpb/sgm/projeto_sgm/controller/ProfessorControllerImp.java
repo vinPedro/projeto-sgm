@@ -70,7 +70,7 @@ public class ProfessorControllerImp {
     }
 
     @PutMapping("/coordenadores/{id}")
-    public ResponseEntity<ProfessorResponseDTO> atualizar(@PathVariable Long id, @RequestBody CoordenadorRequestDTO dto) {
+    public ResponseEntity<ProfessorResponseDTO> atualizarCoordenador(@PathVariable Long id, @RequestBody CoordenadorRequestDTO dto) {
         return professorService.atualizarCoordenador(id, dto);
     }
 

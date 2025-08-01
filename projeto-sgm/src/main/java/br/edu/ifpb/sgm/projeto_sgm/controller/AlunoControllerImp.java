@@ -1,7 +1,6 @@
 package br.edu.ifpb.sgm.projeto_sgm.controller;
 
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.dto.*;
 import br.edu.ifpb.sgm.projeto_sgm.service.AlunoServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +58,37 @@ public class AlunoControllerImp {
     private void encriptPassword(AlunoRequestDTO dto) {
         String encodedPassword = passwordEncoder.encode(dto.getSenha());
         dto.setSenha(encodedPassword);
+    }
+
+    //Métodos monitor
+    @PostMapping("/monitores")
+    public ResponseEntity<AlunoResponseDTO> criarMonitor(@RequestBody MonitorRequestDTO dto) {
+        return alunoService.salvarAlunoMonitor(dto);
+    }
+
+    @GetMapping("/monitores/{id}")
+    public ResponseEntity<MonitorResponseDTO> buscarMonitorPorId(@PathVariable Long id) {
+        return alunoService.buscarMonitorPorId(id);
+    }
+
+    @GetMapping("/monitores")
+    public ResponseEntity<List<AlunoResponseDTO>> listarTodosMonitores() {
+        return alunoService.buscarMonitores();
+    }
+
+    @GetMapping("/null-monitoria")
+    public ResponseEntity<List<AlunoResponseDTO>> listarAlunosNullMonitoria() {
+        return alunoService.buscarAlunosSemMonitoria();
+    }
+
+    @PutMapping("/monitores/{id}")
+    public ResponseEntity<AlunoResponseDTO> atualizarMonitor(@PathVariable Long id, @RequestBody MonitorRequestDTO dto) {
+        return alunoService.atualizarMonitor(id, dto);
+    }
+
+    @DeleteMapping("/monitores/{id}")
+    public ResponseEntity<Void> deletarMonitor(@PathVariable Long id) {
+        return alunoService.deletarMonitor(id);
     }
 
 }

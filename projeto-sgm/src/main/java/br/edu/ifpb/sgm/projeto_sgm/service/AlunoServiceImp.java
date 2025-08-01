@@ -1,10 +1,10 @@
 package br.edu.ifpb.sgm.projeto_sgm.service;
 
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.dto.*;
 import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.AlunoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
+import br.edu.ifpb.sgm.projeto_sgm.exception.ProfessorNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.AlunoMapper;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.PessoaMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.*;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.DISCENTE;
+import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.*;
 
 @Service
 @Transactional
@@ -143,6 +143,100 @@ public class AlunoServiceImp {
 
         Aluno salvo = alunoRepository.save(aluno);
         return ResponseEntity.status(HttpStatus.CREATED).body(alunoMapper.toResponseDTO(salvo));
+    }
+
+    public ResponseEntity<List<AlunoResponseDTO>> buscarMonitores(){
+        List<Aluno> alunos = alunoRepository.findAlunosComMonitoria();
+        List<AlunoResponseDTO> dtos = alunos.stream()
+                .map(alunoMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    public ResponseEntity<List<AlunoResponseDTO>> buscarAlunosSemMonitoria(){
+        List<Aluno> alunos = alunoRepository.findAlunosSemMonitoria();
+        List<AlunoResponseDTO> dtos = alunos.stream()
+                .map(alunoMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    public ResponseEntity<MonitorResponseDTO> buscarMonitorPorId(Long id) {
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new AlunoNotFoundException("Aluno com ID " + id + " não encontrado."));
+        AlunoResponseDTO alunoResponseDTO = alunoMapper.toResponseDTO(aluno);
+
+        MonitorResponseDTO monitorResponseDTO = new MonitorResponseDTO();
+        monitorResponseDTO.setDisciplinasMonitoriaResponseDTO(alunoResponseDTO.getDisciplinasMonitoriaResponseDTO());
+        monitorResponseDTO.setAlunoResponseDTO(alunoResponseDTO);
+
+        return ResponseEntity.ok(monitorResponseDTO);
+    }
+
+    public ResponseEntity<AlunoResponseDTO> salvarAlunoMonitor(MonitorRequestDTO dto) {
+        Pessoa pessoa = pessoaRepository.findById(dto.getId()).orElseThrow();
+
+        Aluno aluno = alunoRepository.findById(dto.getId())
+                .orElseThrow(() -> new AlunoNotFoundException("Aluno com ID " + dto.getId() + " não encontrado."));
+
+        Role monitorRole = roleRepository.findByRole("ROLE_" + MONITOR)
+                .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role MONITOR não encontrada no banco!"));
+
+        if (dto.getDisciplinasMonitoriaId() != null) {
+            aluno.setDisciplinaMonitoria(buscarDisciplinas(dto.getDisciplinasMonitoriaId()));
+            pessoa.getRoles().add(monitorRole);
+        }
+
+        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
+
+        aluno.setPessoa(pessoaSalva);
+
+        Aluno salvo = alunoRepository.save(aluno);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(alunoMapper.toResponseDTO(salvo));
+    }
+
+    public ResponseEntity<AlunoResponseDTO> atualizarMonitor(Long id, MonitorRequestDTO dto) {
+        Pessoa pessoa = pessoaRepository.findById(id).orElseThrow();
+
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new AlunoNotFoundException("Aluno com ID " + id + " não encontrado."));
+
+
+
+        if (dto.getDisciplinasMonitoriaId() == null) {
+            Role monitorRole = roleRepository.findByRole("ROLE_" + MONITOR)
+                    .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role MONITOR não encontrada no banco!"));
+
+            pessoa.getRoles().remove(monitorRole);
+        }
+
+        aluno.setDisciplinaMonitoria(buscarDisciplinas(dto.getDisciplinasMonitoriaId()));
+        aluno.setPessoa(pessoa);
+
+       Aluno atualizado = alunoRepository.save(aluno);
+        return ResponseEntity.ok(alunoMapper.toResponseDTO(atualizado));
+    }
+
+    public ResponseEntity<Void> deletarMonitor(Long id) {
+        Pessoa pessoa = pessoaRepository.findById(id).orElseThrow();
+
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new AlunoNotFoundException("Aluno com ID " + id + " não encontrado."));
+
+        if (pessoa != null) {
+            Role monitorRole = roleRepository.findByRole("ROLE_" + MONITOR)
+                    .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role MONITOR não encontrada no banco!"));
+
+            pessoa.getRoles().remove(monitorRole);
+        }
+
+        aluno.setDisciplinaMonitoria(null);
+        aluno.setPessoa(pessoa);
+
+        alunoRepository.save(aluno);
+
+        return ResponseEntity.noContent().build();
     }
 
     private Set<Disciplina> buscarDisciplinas(Set<Long> ids) {
