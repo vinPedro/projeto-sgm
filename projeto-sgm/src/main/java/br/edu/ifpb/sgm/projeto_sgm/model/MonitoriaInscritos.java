@@ -30,5 +30,5 @@ public class MonitoriaInscritos {
     private Aluno aluno;
 
     @Column(nullable = false)
-    private boolean selecionado;
+    private boolean selecionado = false;
 }

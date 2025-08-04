@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface MonitoriaRepository extends JpaRepository<Monitoria, Long> {
+
+    List<Monitoria> findByProcessoSeletivoId(Long processoSeletivoId);
+
 //    List<Monitoria> findByProfessor_Id(Long professorId);
 //    List<Monitoria> findByProcessoSeletivo_Id(Long processoId);
 //    List<Monitoria> findBySelecionados_Id(Long alunoId);

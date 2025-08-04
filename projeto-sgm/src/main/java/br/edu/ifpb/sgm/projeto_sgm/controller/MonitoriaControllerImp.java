@@ -1,5 +1,6 @@
 package br.edu.ifpb.sgm.projeto_sgm.controller;
 
+import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaInscritosResquestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.service.MonitoriaServiceImp;
@@ -40,5 +41,27 @@ public class MonitoriaControllerImp {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return monitoriaService.deletar(id);
+    }
+
+    //Monitorias por Processo Seletivo
+
+    @GetMapping("/processos-seletivos/{id}")
+    public ResponseEntity<List<MonitoriaResponseDTO>> buscarMonitoriasPorProcessoSeletivo(@PathVariable Long id) {
+        return monitoriaService.listarMonitoriasPorProcessoSeletivo(id);
+    }
+
+    @GetMapping("/inscricao/{id}")
+    public ResponseEntity<List<MonitoriaResponseDTO>> listarInscricoesAluno(@PathVariable Long id) {
+        return monitoriaService.listarInscricoesAluno(id);
+    }
+
+    @DeleteMapping("/inscricao")
+    public ResponseEntity<?> cancelarInscricao(@RequestBody MonitoriaInscritosResquestDTO dto) {
+       return monitoriaService.cancelarInscricao(dto);
+    }
+
+    @PostMapping("/inscricao")
+    public ResponseEntity<MonitoriaResponseDTO> inscreverSe(@RequestBody MonitoriaInscritosResquestDTO dto) {
+        return monitoriaService.inscreverAluno(dto);
     }
 }
