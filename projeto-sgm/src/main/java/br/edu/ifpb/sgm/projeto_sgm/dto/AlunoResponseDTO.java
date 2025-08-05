@@ -1,6 +1,8 @@
 package br.edu.ifpb.sgm.projeto_sgm.dto;
 
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
@@ -13,7 +15,8 @@ public class AlunoResponseDTO{
     protected String emailAcademico;
     protected InstituicaoResponseDTO instituicaoResponseDTO;
     protected String matricula;
-    private Set<DisciplinaResponseDTO> disciplinasPagasResponseDTO;
+    private Set<AlunoDisciplinaPagaResponseDTO> alunoDisciplinaPagaResponseDTO;
     private Set<DisciplinaResponseDTO> disciplinasMonitoriaResponseDTO;
+    private BigDecimal cre;
 
 }

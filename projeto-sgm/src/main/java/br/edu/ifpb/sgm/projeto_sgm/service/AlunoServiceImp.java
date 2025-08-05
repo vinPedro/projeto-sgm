@@ -4,10 +4,11 @@ import br.edu.ifpb.sgm.projeto_sgm.dto.*;
 import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.AlunoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
-import br.edu.ifpb.sgm.projeto_sgm.exception.ProfessorNotFoundException;
+import br.edu.ifpb.sgm.projeto_sgm.exception.MonitoriaNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.AlunoMapper;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.PessoaMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.*;
+import br.edu.ifpb.sgm.projeto_sgm.model.embeddable.AlunoDisciplinaPagaId;
 import br.edu.ifpb.sgm.projeto_sgm.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,9 @@ public class AlunoServiceImp {
     private InstituicaoRepository instituicaoRepository;
 
     @Autowired
+    private AlunoDisciplinaPagaRepository alunoDisciplinaPagaRepository;
+
+    @Autowired
     private AlunoMapper alunoMapper;
 
     @Autowired
@@ -59,7 +63,7 @@ public class AlunoServiceImp {
 
         Pessoa pessoaSalva = pessoaRepository.save(pessoa);
         Aluno aluno = new Aluno();
-        aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
+//        aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
         aluno.setDisciplinaMonitoria(buscarDisciplinas(alunoRequestDTO.getDisciplinasMonitoriaId()));
         aluno.setPessoa(pessoaSalva);
 
@@ -94,7 +98,9 @@ public class AlunoServiceImp {
         Pessoa pessoa = pessoaRepository.findById(id)
                 .orElseThrow(AlunoNotFoundException::new);
 
+
         Pessoa pesssoaAtualizada = pessoaMapper.fromPessoa(dto);
+
 
         if (dto.getInstituicaoId() != null) {
             pesssoaAtualizada.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
@@ -106,13 +112,14 @@ public class AlunoServiceImp {
                 .orElseThrow(AlunoNotFoundException::new);
         alunoMapper.updateAlunoFromDto(dto, aluno);
 
-        if (dto.getDisciplinasPagasId() != null) {
-            aluno.setDisciplinasPagas(buscarDisciplinas(dto.getDisciplinasPagasId()));
-        }
+//        if (dto.getDisciplinasPagasId() != null) {
+//            aluno.setDisciplinasPagas(buscarDisciplinas(dto.getDisciplinasPagasId()));
+//        }
 
         if (dto.getDisciplinasMonitoriaId() != null) {
             aluno.setDisciplinaMonitoria(buscarDisciplinas(dto.getDisciplinasMonitoriaId()));
         }
+
 
         Pessoa pessoaSalva = pessoaRepository.save(pessoa);
         aluno.setPessoa(pessoaSalva);
@@ -137,7 +144,7 @@ public class AlunoServiceImp {
 
         Aluno aluno = new Aluno();
 
-        aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
+//        aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
         aluno.setDisciplinaMonitoria(buscarDisciplinas(alunoRequestDTO.getDisciplinasMonitoriaId()));
         aluno.setPessoa(pessoa);
 
@@ -167,7 +174,7 @@ public class AlunoServiceImp {
         AlunoResponseDTO alunoResponseDTO = alunoMapper.toResponseDTO(aluno);
 
         MonitorResponseDTO monitorResponseDTO = new MonitorResponseDTO();
-        monitorResponseDTO.setDisciplinasMonitoriaResponseDTO(alunoResponseDTO.getDisciplinasMonitoriaResponseDTO());
+//        monitorResponseDTO.setDisciplinasMonitoriaResponseDTO(alunoResponseDTO.getDisciplinasMonitoriaResponseDTO());
         monitorResponseDTO.setAlunoResponseDTO(alunoResponseDTO);
 
         return ResponseEntity.ok(monitorResponseDTO);
@@ -237,6 +244,61 @@ public class AlunoServiceImp {
         alunoRepository.save(aluno);
 
         return ResponseEntity.noContent().build();
+    }
+
+    public ResponseEntity<Void> revogarConclusao(AlunoDisciplinaPagaResquestDTO dto) {
+
+        AlunoDisciplinaPagaId alunoDisciplinaPagaId = new AlunoDisciplinaPagaId();
+        alunoDisciplinaPagaId.setAlunoId(dto.getAlunoId());
+        alunoDisciplinaPagaId.setDisciplinaId(dto.getDisciplinaId());
+
+        if (!alunoDisciplinaPagaRepository.existsById(alunoDisciplinaPagaId)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        alunoDisciplinaPagaRepository.deleteById(alunoDisciplinaPagaId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    public ResponseEntity<AlunoResponseDTO> adicionarConcluinte(AlunoDisciplinaPagaResquestDTO dto){
+        Disciplina disciplina = disciplinaRepository.findById(dto.getDisciplinaId()).orElseThrow(() -> new DisciplinaNotFoundException("Disciplina não encontrada"));
+
+        Aluno aluno = alunoRepository.findById(dto.getAlunoId())
+                .orElseThrow(() -> new AlunoNotFoundException("Aluno não encontrado"));
+
+        AlunoDisciplinaPagaId id = new AlunoDisciplinaPagaId();
+        id.setDisciplinaId(disciplina.getId());
+        id.setAlunoId(aluno.getId());
+
+        AlunoDisciplinaPaga conclusao = new AlunoDisciplinaPaga();
+        conclusao.setId(id);
+        conclusao.setDisciplina(disciplina);
+        conclusao.setAluno(aluno);
+        conclusao.setNota(dto.getNota());
+
+        aluno.getDisciplinasPagas().add(conclusao);
+
+        Aluno salvo = alunoRepository.save(aluno);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(alunoMapper.toResponseDTO(salvo));
+    }
+
+    public ResponseEntity<List<AlunoResponseDTO>> listarAlunosQuePagaramDisciplina(Long id) {
+        List<Aluno> alunos = alunoRepository.listarAlunosQuePagaramDisciplina(id);
+        List<AlunoResponseDTO> dtos = alunos.stream()
+                .map(alunoMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    public ResponseEntity<List<AlunoResponseDTO>> listarAlunosQueNaoPagaramDisciplina(Long id) {
+        List<Aluno> alunos = alunoRepository.listarAlunosQueNaoPagaramDisciplina(id);
+        List<AlunoResponseDTO> dtos = alunos.stream()
+                .map(alunoMapper::toResponseDTO)
+                .toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
     private Set<Disciplina> buscarDisciplinas(Set<Long> ids) {

@@ -113,19 +113,6 @@ public class TestService {
         coordenador.setRoles(List.of(roleRepository.findByRole("ROLE_" + COORDENADOR).orElseThrow(() -> new RuntimeException("Role COORDENADOR não encontrada!"))));
         pessoaRepository.save(coordenador);
 
-        Pessoa pessoaProfessor = new Pessoa();
-        pessoaProfessor.setNome("Professor Teste");
-        pessoaProfessor.setEmail("professor@instituicaoteste.com");
-        pessoaProfessor.setEmailAcademico("professorAcademico@instituicaoteste.com");
-        pessoaProfessor.setCpf("123.456.789-00");
-        pessoaProfessor.setMatricula("12374");
-        pessoaProfessor.setSenha(encriptPassword("senha"));
-        pessoaProfessor.setInstituicao(instituicao);
-        pessoaProfessor.setRoles(List.of(roleRepository.findByRole("ROLE_" + DOCENTE).orElseThrow(() -> new RuntimeException("Role DOCENTE não encontrada!"))));
-        Professor professor = new Professor();
-        professor.setPessoa(pessoaProfessor);
-        professorRepository.save(professor);
-
         Curso curso = new Curso();
         curso.setNome("Curso Teste");
         curso.setDuracao(4);
@@ -138,6 +125,21 @@ public class TestService {
         disciplina.setCargaHoraria(60);
         disciplina.setCurso(curso);
         disciplinaRepository.save(disciplina);
+
+        Pessoa pessoaProfessor = new Pessoa();
+        pessoaProfessor.setNome("Professor Teste");
+        pessoaProfessor.setEmail("professor@instituicaoteste.com");
+        pessoaProfessor.setEmailAcademico("professorAcademico@instituicaoteste.com");
+        pessoaProfessor.setCpf("123.456.789-00");
+        pessoaProfessor.setMatricula("12374");
+        pessoaProfessor.setSenha(encriptPassword("senha"));
+        pessoaProfessor.setInstituicao(instituicao);
+        pessoaProfessor.setRoles(List.of(roleRepository.findByRole("ROLE_" + DOCENTE).orElseThrow(() -> new RuntimeException("Role DOCENTE não encontrada!"))));
+        Professor professor = new Professor();
+        professor.setPessoa(pessoaProfessor);
+        professor.getDisciplinas().add(disciplina);
+        professorRepository.save(professor);
+
 
         AlunoRequestDTO alunoDTO = new AlunoRequestDTO();
         alunoDTO.setNome("Joca Teste");

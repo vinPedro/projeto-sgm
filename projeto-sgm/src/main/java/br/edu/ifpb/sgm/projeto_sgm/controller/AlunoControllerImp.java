@@ -91,4 +91,26 @@ public class AlunoControllerImp {
         return alunoService.deletarMonitor(id);
     }
 
+    //Métodos disciplina
+
+    @GetMapping("/disciplinas/concluintes/{id}")
+    public ResponseEntity<List<AlunoResponseDTO>> listarAlunosQuePagaramDisciplina(@PathVariable Long id) {
+        return alunoService.listarAlunosQuePagaramDisciplina(id);
+    }
+
+    @GetMapping("/disciplinas/null-concluintes/{id}")
+    public ResponseEntity<List<AlunoResponseDTO>> listarAlunosQueNaoPagaramDisciplina(@PathVariable Long id) {
+        return alunoService.listarAlunosQueNaoPagaramDisciplina(id);
+    }
+
+    @PostMapping("/disciplinas/concluintes")
+    public ResponseEntity<AlunoResponseDTO> criarMonitor(@RequestBody AlunoDisciplinaPagaResquestDTO dto) {
+        return alunoService.adicionarConcluinte(dto);
+    }
+
+    @DeleteMapping("/disciplina/concluinte")
+    public ResponseEntity<Void> revogarConclusao(@RequestBody AlunoDisciplinaPagaResquestDTO dto) {
+        return alunoService.revogarConclusao(dto);
+    }
+
 }

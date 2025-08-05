@@ -45,4 +45,9 @@ public class DisciplinaControllerImp {
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return disciplinaService.deletar(id);
     }
+
+    @GetMapping("/professor/{id}")
+    public ResponseEntity<List<DisciplinaResponseDTO>> buscarDisciplinasDeProfessor(@PathVariable Long id) {
+        return disciplinaService.listarDisciplinasDeProfessor(id);
+    }
 }

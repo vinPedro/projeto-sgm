@@ -1,9 +1,11 @@
 package br.edu.ifpb.sgm.projeto_sgm.service;
 
+import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaInscritosResquestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.exception.*;
+import br.edu.ifpb.sgm.projeto_sgm.mapper.AlunoMapper;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.MonitoriaMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.*;
 import br.edu.ifpb.sgm.projeto_sgm.model.embeddable.MonitoriaInscritoId;
@@ -45,6 +47,9 @@ public class MonitoriaServiceImp {
 
     @Autowired
     private MonitoriaMapper monitoriaMapper;
+
+    @Autowired
+    private AlunoMapper alunoMapper;
 
     public ResponseEntity<MonitoriaResponseDTO> salvar(MonitoriaRequestDTO dto) {
         Monitoria monitoria = monitoriaMapper.toEntity(dto);
@@ -145,6 +150,14 @@ public class MonitoriaServiceImp {
         List<Monitoria> monitorias = monitoriaInscricoesRepository.findMonitoriasByAlunoId(id);
         List<MonitoriaResponseDTO> dtos = monitorias.stream()
                 .map(monitoriaMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    public ResponseEntity<List<AlunoResponseDTO>> listarAlunosInscritosPorMonitoria(Long monitoriaId) {
+        List<Aluno> alunos = monitoriaInscricoesRepository.buscarAlunosPorMonitoria(monitoriaId);
+        List<AlunoResponseDTO> dtos = alunos.stream()
+                .map(alunoMapper::toResponseDTO)
                 .toList();
         return ResponseEntity.ok(dtos);
     }

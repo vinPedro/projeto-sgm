@@ -3,6 +3,7 @@ package br.edu.ifpb.sgm.projeto_sgm.repository;
 import br.edu.ifpb.sgm.projeto_sgm.model.Aluno;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -15,6 +16,26 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     @Query("SELECT a FROM Aluno a WHERE SIZE(a.disciplinaMonitoria) = 0")
     List<Aluno> findAlunosSemMonitoria();
+
+    @Query("""
+    SELECT adp.aluno 
+    FROM AlunoDisciplinaPaga adp 
+    WHERE adp.disciplina.id = :disciplinaId
+""")
+    List<Aluno> listarAlunosQuePagaramDisciplina(@Param("disciplinaId") Long disciplinaId);
+
+    @Query("""
+    SELECT a 
+    FROM Aluno a 
+    WHERE a.id NOT IN (
+        SELECT adp.aluno.id 
+        FROM AlunoDisciplinaPaga adp 
+        WHERE adp.disciplina.id = :disciplinaId
+    )
+""")
+    List<Aluno> listarAlunosQueNaoPagaramDisciplina(@Param("disciplinaId") Long disciplinaId);
+
+
 
 //    Optional<Aluno> findByMatricula(String matricula);
 //    List<Aluno> findByNomeContainingIgnoreCase(String nome);

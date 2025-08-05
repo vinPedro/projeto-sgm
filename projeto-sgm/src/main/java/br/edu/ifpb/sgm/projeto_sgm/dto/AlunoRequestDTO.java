@@ -1,6 +1,8 @@
 package br.edu.ifpb.sgm.projeto_sgm.dto;
 
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
@@ -15,5 +17,6 @@ public class AlunoRequestDTO{
     protected String matricula;
     private Set<Long> disciplinasPagasId;
     private Set<Long> disciplinasMonitoriaId;
+    private BigDecimal cre;
 
 }

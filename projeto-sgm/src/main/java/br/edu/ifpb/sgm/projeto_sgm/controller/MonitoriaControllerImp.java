@@ -1,8 +1,10 @@
 package br.edu.ifpb.sgm.projeto_sgm.controller;
 
+import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaInscritosResquestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.model.Aluno;
 import br.edu.ifpb.sgm.projeto_sgm.service.MonitoriaServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +65,10 @@ public class MonitoriaControllerImp {
     @PostMapping("/inscricao")
     public ResponseEntity<MonitoriaResponseDTO> inscreverSe(@RequestBody MonitoriaInscritosResquestDTO dto) {
         return monitoriaService.inscreverAluno(dto);
+    }
+
+    @GetMapping("/inscricao/alunos/{id}")
+    public ResponseEntity<List<AlunoResponseDTO>> getAlunosInscritos(@PathVariable("id") Long monitoriaId) {
+        return monitoriaService.listarAlunosInscritosPorMonitoria(monitoriaId);
     }
 }

@@ -72,7 +72,7 @@ public class WebConfig implements WebMvcConfigurer{
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/instituicoes/**").hasRole(ADMIN)
+                        .requestMatchers("/api/instituicoes/**").permitAll()
                         .requestMatchers("/api/cursos/**").hasAnyRole(ADMIN, COORDENADOR)
                         .requestMatchers(HttpMethod.GET, "/api/disciplinas/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE)
                         .requestMatchers("/api/disciplinas/**").hasAnyRole(ADMIN, COORDENADOR)
@@ -85,7 +85,7 @@ public class WebConfig implements WebMvcConfigurer{
                         .requestMatchers(HttpMethod.POST, "/api/alunos").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/alunos/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE)
                         .requestMatchers(HttpMethod.PUT, "/api/alunos/{id}").hasAnyRole(ADMIN, COORDENADOR, DISCENTE)
-                        .requestMatchers("/api/alunos/**").hasAnyRole(ADMIN, COORDENADOR)
+                        .requestMatchers("/api/alunos/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE)
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
