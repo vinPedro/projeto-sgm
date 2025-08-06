@@ -12,5 +12,6 @@ public class ProcessoSeletivoResponseDTO {
     private LocalDate fim;
     private String numero;
     private InstituicaoResponseDTO instituicaoResponseDTO;
+    private boolean finalizado;
 
 }

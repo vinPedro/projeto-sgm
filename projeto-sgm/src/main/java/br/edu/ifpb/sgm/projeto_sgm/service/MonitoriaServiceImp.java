@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +45,9 @@ public class MonitoriaServiceImp {
 
     @Autowired
     private AtividadeRepository atividadeRepository;
+
+    @Autowired
+    private AlunoDisciplinaPagaRepository alunoDisciplinaPagaRepository;
 
     @Autowired
     private MonitoriaMapper monitoriaMapper;
@@ -127,8 +131,22 @@ public class MonitoriaServiceImp {
         Monitoria monitoria = monitoriaRepository.findById(dto.getMonitoriaId())
                 .orElseThrow(() -> new MonitoriaNotFoundException("Monitoria não encontrada"));
 
+        LocalDate dataAtual = LocalDate.now();
+
+        if(monitoria.getProcessoSeletivo().getFim().isBefore(dataAtual)){
+            throw new IllegalArgumentException("O processo já chegou ao fim, não permitindo mais inscrições");
+        }
+
+        if(monitoria.getProcessoSeletivo().isFinalizado()){
+            throw new IllegalArgumentException("O processo já foi finalizado, não permitindo mais inscrições");
+        }
+
         Aluno aluno = alunoRepository.findById(dto.getAlunoId())
                 .orElseThrow(() -> new AlunoNotFoundException("Aluno não encontrado"));
+
+        if(!alunoDisciplinaPagaRepository.existsByAlunoIdAndDisciplinaId(aluno.getId(), monitoria.getDisciplina().getId())){
+            throw new IllegalArgumentException("Você não concluiu essa Disciplina! ");
+        }
 
         MonitoriaInscritoId id = new MonitoriaInscritoId();
         id.setMonitoriaId(monitoria.getId());

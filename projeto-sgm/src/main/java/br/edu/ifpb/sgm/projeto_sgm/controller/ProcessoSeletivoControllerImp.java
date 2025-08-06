@@ -41,4 +41,10 @@ public class ProcessoSeletivoControllerImp {
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return processoSeletivoService.deletar(id);
     }
+
+
+    @PutMapping("/resultado/{id}")
+    public ResponseEntity<Void> resultadoProcesso(@PathVariable Long id) {
+        return processoSeletivoService.resultadoProcesso(id);
+    }
 }

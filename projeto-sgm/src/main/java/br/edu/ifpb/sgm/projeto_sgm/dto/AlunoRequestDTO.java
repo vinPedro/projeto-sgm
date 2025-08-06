@@ -15,7 +15,6 @@ public class AlunoRequestDTO{
     private String senha;
     protected Long instituicaoId;
     protected String matricula;
-    private Set<Long> disciplinasPagasId;
     private Set<Long> disciplinasMonitoriaId;
     private BigDecimal cre;
 

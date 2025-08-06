@@ -1,8 +1,8 @@
 package br.edu.ifpb.sgm.projeto_sgm.service;
 
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.model.*;
+import br.edu.ifpb.sgm.projeto_sgm.model.embeddable.MonitoriaInscritoId;
 import br.edu.ifpb.sgm.projeto_sgm.repository.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.*;
 
@@ -149,7 +149,30 @@ public class TestService {
         alunoDTO.setMatricula("123456");
         alunoDTO.setSenha(encriptPassword("senhaAluno"));
         alunoDTO.setInstituicaoId(instituicao.getId());
+        alunoDTO.setCre(new BigDecimal(80));
         alunoServiceImp.salvar(alunoDTO);
+
+        AlunoRequestDTO alunoDTO1 = new AlunoRequestDTO();
+        alunoDTO1.setNome("Teste aluno");
+        alunoDTO1.setCpf("222.222.222-21");
+        alunoDTO1.setEmail("testealuno@gmail.com");
+        alunoDTO1.setEmailAcademico("testealuno.academico@gmail.com");
+        alunoDTO1.setMatricula("12345676");
+        alunoDTO1.setSenha(encriptPassword("senhaAluno"));
+        alunoDTO1.setInstituicaoId(instituicao.getId());
+        alunoDTO1.setCre(new BigDecimal(80));
+        alunoServiceImp.salvar(alunoDTO1);
+
+        AlunoRequestDTO alunoDTO2 = new AlunoRequestDTO();
+        alunoDTO2.setNome("Teste aluno2");
+        alunoDTO2.setCpf("222.222.222-23");
+        alunoDTO2.setEmail("testealuno2@gmail.com");
+        alunoDTO2.setEmailAcademico("testealuno2.academico@gmail.com");
+        alunoDTO2.setMatricula("123456762");
+        alunoDTO2.setSenha(encriptPassword("senhaAluno"));
+        alunoDTO2.setInstituicaoId(instituicao.getId());
+        alunoDTO2.setCre(new BigDecimal(80));
+        alunoServiceImp.salvar(alunoDTO2);
 
         ProcessoSeletivo processoSeletivo = new ProcessoSeletivo();
         processoSeletivo.setInstituicao(instituicao);
@@ -158,14 +181,36 @@ public class TestService {
         processoSeletivo.setFim(LocalDate.now().plusMonths(2));
         processoSeletivoRepository.save(processoSeletivo);
 
-
         Monitoria monitoria = new Monitoria();
         monitoria.setDisciplina(disciplina);
         monitoria.setProfessor(professor);
-        monitoria.setNumeroVaga(10);
-        monitoria.setNumeroVagaBolsa(2);
+        monitoria.setNumeroVaga(1);
+        monitoria.setNumeroVagaBolsa(1);
         monitoria.setCargaHoraria(60);
         monitoria.setProcessoSeletivo(processoSeletivo);
+
+//        MonitoriaInscritoId id = new MonitoriaInscritoId();
+//        id.setMonitoriaId(monitoria.getId());
+//        id.setAlunoId(1L);
+//
+//        MonitoriaInscritos inscricao = new MonitoriaInscritos();
+//        inscricao.setId(id);
+//        inscricao.setMonitoria(monitoria);
+//        inscricao.setAluno(alunoRepository.findById(4L).orElseThrow());
+//
+//        monitoria.getInscricoes().add(inscricao);
+
+        MonitoriaInscritoId id1 = new MonitoriaInscritoId();
+        id1.setMonitoriaId(monitoria.getId());
+        id1.setAlunoId(2L);
+
+        MonitoriaInscritos inscricao1 = new MonitoriaInscritos();
+        inscricao1.setId(id1);
+        inscricao1.setMonitoria(monitoria);
+        inscricao1.setAluno(alunoRepository.findById(5L).orElseThrow());
+
+        monitoria.getInscricoes().add(inscricao1);
+
         monitoriaRepository.save(monitoria);
 
         Atividade atividade = new Atividade();

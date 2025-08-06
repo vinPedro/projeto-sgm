@@ -66,6 +66,8 @@ public class AlunoServiceImp {
 //        aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
         aluno.setDisciplinaMonitoria(buscarDisciplinas(alunoRequestDTO.getDisciplinasMonitoriaId()));
         aluno.setPessoa(pessoaSalva);
+        aluno.setCre(alunoRequestDTO.getCre());
+
 
         Aluno salvo = alunoRepository.save(aluno);
         return ResponseEntity.status(HttpStatus.CREATED).body(alunoMapper.toResponseDTO(salvo));
@@ -221,7 +223,7 @@ public class AlunoServiceImp {
         aluno.setDisciplinaMonitoria(buscarDisciplinas(dto.getDisciplinasMonitoriaId()));
         aluno.setPessoa(pessoa);
 
-       Aluno atualizado = alunoRepository.save(aluno);
+        Aluno atualizado = alunoRepository.save(aluno);
         return ResponseEntity.ok(alunoMapper.toResponseDTO(atualizado));
     }
 
@@ -262,10 +264,14 @@ public class AlunoServiceImp {
     }
 
     public ResponseEntity<AlunoResponseDTO> adicionarConcluinte(AlunoDisciplinaPagaResquestDTO dto){
-        Disciplina disciplina = disciplinaRepository.findById(dto.getDisciplinaId()).orElseThrow(() -> new DisciplinaNotFoundException("Disciplina não encontrada"));
+        Disciplina disciplina = disciplinaRepository.findById(dto.getDisciplinaId())
+                .orElseThrow(() -> new DisciplinaNotFoundException("Disciplina não encontrada"));
+
 
         Aluno aluno = alunoRepository.findById(dto.getAlunoId())
                 .orElseThrow(() -> new AlunoNotFoundException("Aluno não encontrado"));
+
+
 
         AlunoDisciplinaPagaId id = new AlunoDisciplinaPagaId();
         id.setDisciplinaId(disciplina.getId());

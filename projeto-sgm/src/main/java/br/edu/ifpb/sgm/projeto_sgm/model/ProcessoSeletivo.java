@@ -34,4 +34,7 @@ public class ProcessoSeletivo {
     @JoinColumn(name = "instiuicao_id", nullable = false)
     private Instituicao instituicao;
 
+    @Column
+    private boolean finalizado = false;
+
 }
