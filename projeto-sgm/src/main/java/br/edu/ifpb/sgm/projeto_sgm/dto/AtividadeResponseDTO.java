@@ -11,4 +11,5 @@ public class AtividadeResponseDTO {
     private LocalDateTime dataHora;
     private String descricao;
     private MonitoriaResponseDTO monitoriaResponseDTO;
+    private String matricula;
 }

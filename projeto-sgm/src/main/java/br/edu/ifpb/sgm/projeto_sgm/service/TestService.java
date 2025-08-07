@@ -189,34 +189,13 @@ public class TestService {
         monitoria.setCargaHoraria(60);
         monitoria.setProcessoSeletivo(processoSeletivo);
 
-//        MonitoriaInscritoId id = new MonitoriaInscritoId();
-//        id.setMonitoriaId(monitoria.getId());
-//        id.setAlunoId(1L);
-//
-//        MonitoriaInscritos inscricao = new MonitoriaInscritos();
-//        inscricao.setId(id);
-//        inscricao.setMonitoria(monitoria);
-//        inscricao.setAluno(alunoRepository.findById(4L).orElseThrow());
-//
-//        monitoria.getInscricoes().add(inscricao);
-
-        MonitoriaInscritoId id1 = new MonitoriaInscritoId();
-        id1.setMonitoriaId(monitoria.getId());
-        id1.setAlunoId(2L);
-
-        MonitoriaInscritos inscricao1 = new MonitoriaInscritos();
-        inscricao1.setId(id1);
-        inscricao1.setMonitoria(monitoria);
-        inscricao1.setAluno(alunoRepository.findById(5L).orElseThrow());
-
-        monitoria.getInscricoes().add(inscricao1);
-
         monitoriaRepository.save(monitoria);
 
         Atividade atividade = new Atividade();
         atividade.setDataHora(LocalDateTime.now());
         atividade.setDescricao("atividade teste");
         atividade.setMonitoria(monitoria);
+        atividade.setMatricula("12345676");
         atividadeRepository.save(atividade);
     }
 }

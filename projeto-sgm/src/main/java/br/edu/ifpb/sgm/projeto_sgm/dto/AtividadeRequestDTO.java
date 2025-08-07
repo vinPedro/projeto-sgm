@@ -10,4 +10,5 @@ public class AtividadeRequestDTO {
     private LocalDateTime dataHora;
     private String descricao;
     private Long monitoriaId;
+    private String matricula;
 }

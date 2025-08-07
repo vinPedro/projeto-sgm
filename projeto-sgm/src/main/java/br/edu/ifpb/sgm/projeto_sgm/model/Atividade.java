@@ -30,4 +30,8 @@ public class Atividade {
     @ManyToOne(optional = false)
     @JoinColumn(name = "monitoria_id", nullable = false)
     private Monitoria monitoria;
+
+    @Column(length = 12, nullable = false)
+    protected String matricula;
+
 }

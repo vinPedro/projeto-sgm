@@ -31,6 +31,7 @@ public interface PessoaMapper {
 
 
     @Mapping(target = "authorities", ignore = true)
+    @Mapping(target = "senha", ignore = true)
     Pessoa toEntity(PessoaRequestDTO pessoaRequestDTO);
 
     @Mapping(source = "instituicao", target = "instituicaoResponseDTO")
