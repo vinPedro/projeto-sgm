@@ -46,6 +46,7 @@ public class DisciplinaServiceImp {
     public ResponseEntity<DisciplinaResponseDTO> buscarPorId(Long id) {
         Disciplina disciplina = disciplinaRepository.findById(id)
                 .orElseThrow(() -> new DisciplinaNotFoundException("Disciplina com ID " + id + " não encontrada."));
+
         return ResponseEntity.ok(disciplinaMapper.toResponseDTO(disciplina));
     }
 
@@ -84,6 +85,14 @@ public class DisciplinaServiceImp {
                 .orElseThrow(() -> new DisciplinaNotFoundException("Disciplina com ID " + id + " não encontrada."));
         disciplinaRepository.delete(disciplina);
         return ResponseEntity.noContent().build();
+    }
+
+    public ResponseEntity<List<DisciplinaResponseDTO>> listarDisciplinasDeProfessor(Long id) {
+        List<Disciplina> disciplinas = disciplinaRepository.findByProfessorId(id);
+        List<DisciplinaResponseDTO> dtos = disciplinas.stream()
+                .map(disciplinaMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
     }
 
     // Métodos auxiliares

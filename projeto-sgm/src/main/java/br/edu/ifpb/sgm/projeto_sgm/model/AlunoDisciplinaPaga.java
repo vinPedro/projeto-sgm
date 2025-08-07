@@ -1,34 +1,35 @@
 package br.edu.ifpb.sgm.projeto_sgm.model;
 
-import br.edu.ifpb.sgm.projeto_sgm.model.embeddable.MonitoriaInscritoId;
+import br.edu.ifpb.sgm.projeto_sgm.model.embeddable.AlunoDisciplinaPagaId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
+@Table(name = "aluno_disciplinas_pagas")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "monitoria_inscritos")
-public class MonitoriaInscritos {
+public class AlunoDisciplinaPaga {
 
     @EmbeddedId
-    private MonitoriaInscritoId id = new MonitoriaInscritoId();
-
-
-    @ManyToOne
-    @MapsId("monitoriaId")
-    @JoinColumn(name = "monitoria_id")
-    private Monitoria monitoria;
+    private AlunoDisciplinaPagaId id = new AlunoDisciplinaPagaId();
 
     @ManyToOne
     @MapsId("alunoId")
     @JoinColumn(name = "aluno_id")
     private Aluno aluno;
 
+    @ManyToOne
+    @MapsId("disciplinaId")
+    @JoinColumn(name = "disciplina_id")
+    private Disciplina disciplina;
+
     @Column(nullable = false)
-    private boolean selecionado = false;
+    private BigDecimal nota;
 }

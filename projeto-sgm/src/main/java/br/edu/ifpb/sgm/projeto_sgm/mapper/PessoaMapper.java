@@ -38,6 +38,7 @@ public interface PessoaMapper {
 
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "senha", ignore = true)
+    @Mapping(target = "roles", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updatePessoaFromPessoa(Pessoa pessoaAtualizada, @MappingTarget Pessoa entity);
 
