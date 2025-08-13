@@ -3,7 +3,9 @@ package br.edu.ifpb.sgm.projeto_sgm.controller;
 import br.edu.ifpb.sgm.projeto_sgm.dto.*;
 import br.edu.ifpb.sgm.projeto_sgm.model.Professor;
 import br.edu.ifpb.sgm.projeto_sgm.service.ProfessorServiceImp;
+import br.edu.ifpb.sgm.projeto_sgm.service.SuapService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +20,20 @@ public class ProfessorControllerImp {
     private ProfessorServiceImp professorService;
 
     @Autowired
+    private SuapService suapService;
+
+    @Autowired
     protected PasswordEncoder passwordEncoder;
 
     @PostMapping
-    public ResponseEntity<ProfessorResponseDTO> criar(@RequestBody ProfessorRequestDTO dto) {
+    public ResponseEntity<?> criar(@RequestBody ProfessorRequestDTO dto) {
+
+        String token = suapService.validarLogin(dto.getMatricula(), dto.getSenha());
+        if (token == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Matrícula ou senha inválida no SUAP.");
+        }
+
         encriptPassword(dto);
         return professorService.salvar(dto);
     }
