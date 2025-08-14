@@ -29,10 +29,8 @@ public class ProfessorControllerImp {
     public ResponseEntity<?> criar(@RequestBody ProfessorRequestDTO dto) {
 
         String token = suapService.validarLogin(dto.getMatricula(), dto.getSenha());
-        if (token == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Matrícula ou senha inválida no SUAP.");
-        }
+        suapService.validarToken(token);
+        suapService.validarNomeProfessor(token, dto.getMatricula(), dto.getNome());
 
         encriptPassword(dto);
         return professorService.salvar(dto);

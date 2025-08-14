@@ -28,10 +28,8 @@ public class AlunoControllerImp {
     public ResponseEntity<?> criar(@RequestBody AlunoRequestDTO dto) {
 
         String token = suapService.validarLogin(dto.getMatricula(), dto.getSenha());
-        if (token == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Matrícula ou senha inválida no SUAP.");
-        }
+        suapService.validarToken(token);
+        suapService.validarNomeAluno(token, dto.getMatricula(), dto.getNome());
 
         encriptPassword(dto);
         return alunoService.salvar(dto);
